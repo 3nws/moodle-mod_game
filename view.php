@@ -98,9 +98,10 @@ if ($redirect && !$forceview) {
     //     // file doesn't exist - do something
     // }
 
-    $fp = get_file_packer();
+    $fp = get_file_packer('application/zip');
     $filepath = $file->get_filepath().$file->get_filename();
-    $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
+    $files = $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
+    die($files);
     // die($CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
     // $zip = new ZipArchive;
     // if ($zip->open($file->get_filepath().$file->get_filename(), ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE)) {
