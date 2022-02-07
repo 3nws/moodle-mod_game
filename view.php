@@ -88,11 +88,38 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 }
 
 if ($redirect && !$forceview) {
-    // coming from course page or url index page
-    // this redirect trick solves caching problems when tracking views ;-)
-    $path = '/'.$context->id.'/mod_game/content/'.$game->revision.$file->get_filepath().$file->get_filename();
-    $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD);
-    redirect($fullurl);
+    // TODO EXTRACT ZIP REDIRECT INDEX.HTML 
+    // die($file->get_filepath().$file->get_filename());
+
+    // Read contents
+    // if ($zip) {
+    //     $contents = $zip->get_content();
+    // } else {
+    //     // file doesn't exist - do something
+    // }
+
+    $fp = get_file_packer();
+    $filepath = $file->get_filepath().$file->get_filename();
+    die($filepath);
+    $fp->extract_to_pathname($filepath, $filepath.'_extracted');
+    
+    // if ($zip->open($file->get_filepath().$file->get_filename(), ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE)) {
+
+
+
+    //     $zip->extractTo('./games/'.explode(".", $file->get_filename())[0]);
+    //     $zip->close();
+    //     echo 'ok';
+    // } else {
+    //     echo 'failed';
+    // }
+
+
+
+
+    // $path = '/'.$context->id.'/mod_game/content/'.$game->revision.$file->get_filepath().$file->get_filename();
+    // $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD);
+    // redirect($fullurl);
 }
 
 switch ($displaytype) {

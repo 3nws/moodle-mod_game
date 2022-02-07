@@ -359,7 +359,7 @@ function game_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
  */
 function game_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
     global $CFG, $DB;
-    require_once("$CFG->libdir/gamelib.php");
+    require_once("$CFG->libdir/resourcelib.php");
 
     if ($context->contextlevel != CONTEXT_MODULE) {
         return false;
