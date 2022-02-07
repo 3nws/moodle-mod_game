@@ -101,8 +101,31 @@ if ($redirect && !$forceview) {
     $fp = get_file_packer('application/zip');
     $filepath = $file->get_filepath().$file->get_filename();
     $files = $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
-    die($files);
-    // die($CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
+    
+    
+
+
+    // serves the file nothing more
+    //$fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+    
+    
+   
+   
+   
+   
+   
+    // die($files);
+    // if ($files = $fs->get_area_files($context->id, 'mod_game', 'content', '0', 'sortorder', false)) {
+    //         // Look through each file being managed
+    //         foreach ($files as $file) {
+    //         // Build the File URL. Long process! But extremely accurate.
+    //             $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+    //             die($fileurl);
+    //         }
+    //     } else {
+    //         echo '<p>Please upload an image first</p>';
+    //     }
+    // // die($CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
     // $zip = new ZipArchive;
     // if ($zip->open($file->get_filepath().$file->get_filename(), ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE)) {
 
