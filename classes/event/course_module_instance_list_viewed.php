@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_resource instance list viewed event.
+ * The mod_game instance list viewed event.
  *
- * @package    mod_resource
+ * @package    mod_game
  * @copyright  2014 Rajesh Taneja <rajesh@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_resource\event;
+namespace mod_game\event;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_resource instance list viewed event class.
+ * The mod_game instance list viewed event class.
  *
- * @package    mod_resource
+ * @package    mod_game
  * @since      Moodle 2.7
  * @copyright  2014 Rajesh Taneja <rajesh@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

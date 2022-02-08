@@ -17,7 +17,7 @@
 /**
  * Resource external API
  *
- * @package    mod_resource
+ * @package    mod_game
  * @category   external
  * @copyright  2015 Juan Leyva <juan@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -31,13 +31,13 @@ require_once("$CFG->libdir/externallib.php");
 /**
  * Resource external functions
  *
- * @package    mod_resource
+ * @package    mod_game
  * @category   external
  * @copyright  2015 Juan Leyva <juan@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since      Moodle 3.0
  */
-class mod_resource_external extends external_api {
+class mod_game_external extends external_api {
 
     /**
      * Returns description of method parameters
@@ -45,43 +45,43 @@ class mod_resource_external extends external_api {
      * @return external_function_parameters
      * @since Moodle 3.0
      */
-    public static function view_resource_parameters() {
+    public static function view_game_parameters() {
         return new external_function_parameters(
             array(
-                'resourceid' => new external_value(PARAM_INT, 'resource instance id')
+                'gameid' => new external_value(PARAM_INT, 'game instance id')
             )
         );
     }
 
     /**
-     * Simulate the resource/view.php web interface page: trigger events, completion, etc...
+     * Simulate the game/view.php web interface page: trigger events, completion, etc...
      *
-     * @param int $resourceid the resource instance id
+     * @param int $gameid the game instance id
      * @return array of warnings and status result
      * @since Moodle 3.0
      * @throws moodle_exception
      */
-    public static function view_resource($resourceid) {
+    public static function view_game($gameid) {
         global $DB, $CFG;
-        require_once($CFG->dirroot . "/mod/resource/lib.php");
+        require_once($CFG->dirroot . "/mod/game/lib.php");
 
-        $params = self::validate_parameters(self::view_resource_parameters(),
+        $params = self::validate_parameters(self::view_game_parameters(),
                                             array(
-                                                'resourceid' => $resourceid
+                                                'gameid' => $gameid
                                             ));
         $warnings = array();
 
         // Request and permission validation.
-        $resource = $DB->get_record('resource', array('id' => $params['resourceid']), '*', MUST_EXIST);
-        list($course, $cm) = get_course_and_cm_from_instance($resource, 'resource');
+        $game = $DB->get_record('game', array('id' => $params['gameid']), '*', MUST_EXIST);
+        list($course, $cm) = get_course_and_cm_from_instance($game, 'game');
 
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
-        require_capability('mod/resource:view', $context);
+        require_capability('mod/game:view', $context);
 
-        // Call the resource/lib API.
-        resource_view($resource, $course, $cm, $context);
+        // Call the game/lib API.
+        game_view($game, $course, $cm, $context);
 
         $result = array();
         $result['status'] = true;
@@ -95,7 +95,7 @@ class mod_resource_external extends external_api {
      * @return external_description
      * @since Moodle 3.0
      */
-    public static function view_resource_returns() {
+    public static function view_game_returns() {
         return new external_single_structure(
             array(
                 'status' => new external_value(PARAM_BOOL, 'status: true if success'),
@@ -105,12 +105,12 @@ class mod_resource_external extends external_api {
     }
 
     /**
-     * Describes the parameters for get_resources_by_courses.
+     * Describes the parameters for get_games_by_courses.
      *
      * @return external_function_parameters
      * @since Moodle 3.3
      */
-    public static function get_resources_by_courses_parameters() {
+    public static function get_games_by_courses_parameters() {
         return new external_function_parameters (
             array(
                 'courseids' => new external_multiple_structure(
@@ -128,15 +128,15 @@ class mod_resource_external extends external_api {
      * @return array of warnings and files
      * @since Moodle 3.3
      */
-    public static function get_resources_by_courses($courseids = array()) {
+    public static function get_games_by_courses($courseids = array()) {
 
         $warnings = array();
-        $returnedresources = array();
+        $returnedgames = array();
 
         $params = array(
             'courseids' => $courseids,
         );
-        $params = self::validate_parameters(self::get_resources_by_courses_parameters(), $params);
+        $params = self::validate_parameters(self::get_games_by_courses_parameters(), $params);
 
         $mycourses = array();
         if (empty($params['courseids'])) {
@@ -149,41 +149,41 @@ class mod_resource_external extends external_api {
 
             list($courses, $warnings) = external_util::validate_courses($params['courseids'], $mycourses);
 
-            // Get the resources in this course, this function checks users visibility permissions.
+            // Get the games in this course, this function checks users visibility permissions.
             // We can avoid then additional validate_context calls.
-            $resources = get_all_instances_in_courses("resource", $courses);
-            foreach ($resources as $resource) {
-                $context = context_module::instance($resource->coursemodule);
+            $games = get_all_instances_in_courses("game", $courses);
+            foreach ($games as $game) {
+                $context = context_module::instance($game->coursemodule);
                 // Entry to return.
-                $resource->name = external_format_string($resource->name, $context->id);
+                $game->name = external_format_string($game->name, $context->id);
                 $options = array('noclean' => true);
-                list($resource->intro, $resource->introformat) =
-                    external_format_text($resource->intro, $resource->introformat, $context->id, 'mod_resource', 'intro', null,
+                list($game->intro, $game->introformat) =
+                    external_format_text($game->intro, $game->introformat, $context->id, 'mod_game', 'intro', null,
                         $options);
-                $resource->introfiles = external_util::get_area_files($context->id, 'mod_resource', 'intro', false, false);
-                $resource->contentfiles = external_util::get_area_files($context->id, 'mod_resource', 'content');
+                $game->introfiles = external_util::get_area_files($context->id, 'mod_game', 'intro', false, false);
+                $game->contentfiles = external_util::get_area_files($context->id, 'mod_game', 'content');
 
-                $returnedresources[] = $resource;
+                $returnedgames[] = $game;
             }
         }
 
         $result = array(
-            'resources' => $returnedresources,
+            'games' => $returnedgames,
             'warnings' => $warnings
         );
         return $result;
     }
 
     /**
-     * Describes the get_resources_by_courses return value.
+     * Describes the get_games_by_courses return value.
      *
      * @return external_single_structure
      * @since Moodle 3.3
      */
-    public static function get_resources_by_courses_returns() {
+    public static function get_games_by_courses_returns() {
         return new external_single_structure(
             array(
-                'resources' => new external_multiple_structure(
+                'games' => new external_multiple_structure(
                     new external_single_structure(
                         array(
                             'id' => new external_value(PARAM_INT, 'Module id'),
@@ -194,14 +194,14 @@ class mod_resource_external extends external_api {
                             'introformat' => new external_format_value('intro', 'Summary format'),
                             'introfiles' => new external_files('Files in the introduction text'),
                             'contentfiles' => new external_files('Files in the content'),
-                            'tobemigrated' => new external_value(PARAM_INT, 'Whether this resource was migrated'),
+                            'tobemigrated' => new external_value(PARAM_INT, 'Whether this game was migrated'),
                             'legacyfiles' => new external_value(PARAM_INT, 'Legacy files flag'),
                             'legacyfileslast' => new external_value(PARAM_INT, 'Legacy files last control flag'),
-                            'display' => new external_value(PARAM_INT, 'How to display the resource'),
+                            'display' => new external_value(PARAM_INT, 'How to display the game'),
                             'displayoptions' => new external_value(PARAM_RAW, 'Display options (width, height)'),
-                            'filterfiles' => new external_value(PARAM_INT, 'If filters should be applied to the resource content'),
+                            'filterfiles' => new external_value(PARAM_INT, 'If filters should be applied to the game content'),
                             'revision' => new external_value(PARAM_INT, 'Incremented when after each file changes, to avoid cache'),
-                            'timemodified' => new external_value(PARAM_INT, 'Last time the resource was modified'),
+                            'timemodified' => new external_value(PARAM_INT, 'Last time the game was modified'),
                             'section' => new external_value(PARAM_INT, 'Course section id'),
                             'visible' => new external_value(PARAM_INT, 'Module visibility'),
                             'groupmode' => new external_value(PARAM_INT, 'Group mode'),

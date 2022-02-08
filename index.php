@@ -16,9 +16,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * List of all resources in course
+ * List of all games in course
  *
- * @package    mod_resource
+ * @package    mod_game
  * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,26 +35,26 @@ $PAGE->set_pagelayout('incourse');
 $params = array(
     'context' => context_course::instance($course->id)
 );
-$event = \mod_resource\event\course_module_instance_list_viewed::create($params);
+$event = \mod_game\event\course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$strresource     = get_string('modulename', 'resource');
-$strresources    = get_string('modulenameplural', 'resource');
+$strgame     = get_string('modulename', 'game');
+$strgames    = get_string('modulenameplural', 'game');
 $strsectionname  = get_string('sectionname', 'format_'.$course->format);
 $strname         = get_string('name');
 $strintro        = get_string('moduleintro');
 $strlastmodified = get_string('lastmodified');
 
-$PAGE->set_url('/mod/resource/index.php', array('id' => $course->id));
-$PAGE->set_title($course->shortname.': '.$strresources);
+$PAGE->set_url('/mod/game/index.php', array('id' => $course->id));
+$PAGE->set_title($course->shortname.': '.$strgames);
 $PAGE->set_heading($course->fullname);
-$PAGE->navbar->add($strresources);
+$PAGE->navbar->add($strgames);
 echo $OUTPUT->header();
-echo $OUTPUT->heading($strresources);
+echo $OUTPUT->heading($strgames);
 
-if (!$resources = get_all_instances_in_course('resource', $course)) {
-    notice(get_string('thereareno', 'moodle', $strresources), "$CFG->wwwroot/course/view.php?id=$course->id");
+if (!$games = get_all_instances_in_course('game', $course)) {
+    notice(get_string('thereareno', 'moodle', $strgames), "$CFG->wwwroot/course/view.php?id=$course->id");
     exit;
 }
 
@@ -73,35 +73,35 @@ if ($usesections) {
 
 $modinfo = get_fast_modinfo($course);
 $currentsection = '';
-foreach ($resources as $resource) {
-    $cm = $modinfo->cms[$resource->coursemodule];
+foreach ($games as $game) {
+    $cm = $modinfo->cms[$game->coursemodule];
     if ($usesections) {
         $printsection = '';
-        if ($resource->section !== $currentsection) {
-            if ($resource->section) {
-                $printsection = get_section_name($course, $resource->section);
+        if ($game->section !== $currentsection) {
+            if ($game->section) {
+                $printsection = get_section_name($course, $game->section);
             }
             if ($currentsection !== '') {
                 $table->data[] = 'hr';
             }
-            $currentsection = $resource->section;
+            $currentsection = $game->section;
         }
     } else {
-        $printsection = '<span class="smallinfo">'.userdate($resource->timemodified)."</span>";
+        $printsection = '<span class="smallinfo">'.userdate($game->timemodified)."</span>";
     }
 
     $extra = empty($cm->extra) ? '' : $cm->extra;
     $icon = '';
     if (!empty($cm->icon)) {
-        // each resource file has an icon in 2.0
+        // each game file has an icon in 2.0
         $icon = $OUTPUT->pix_icon($cm->icon, get_string('modulename', $cm->modname));
     }
 
-    $class = $resource->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
+    $class = $game->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
     $table->data[] = array (
         $printsection,
-        "<a $class $extra href=\"view.php?id=$cm->id\">".$icon.format_string($resource->name)."</a>",
-        format_module_intro('resource', $resource, $cm->id));
+        "<a $class $extra href=\"view.php?id=$cm->id\">".$icon.format_string($game->name)."</a>",
+        format_module_intro('game', $game, $cm->id));
 }
 
 echo html_writer::table($table);

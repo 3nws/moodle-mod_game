@@ -98,22 +98,36 @@ if ($redirect && !$forceview) {
     //     // file doesn't exist - do something
     // }
 
+    // die($a);
     $fp = get_file_packer('application/zip');
+    // die($a->get_content());
     $filepath = $file->get_filepath().$file->get_filename();
-    $files = $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
-    
-    
-
+    $filepath = '/'.$context->id.'/mod_game/content/'.$game->revision.$file->get_filepath().$file->get_filename();
+    // $url = moodle_url::make_file_url('/pluginfile.php', $filepath, $displaytype == RESOURCELIB_DISPLAY_OPEN);
+    // $files = $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
+    // redirect($url);
+    // die($filepath);
+    // // die($files);
 
     // serves the file nothing more
     //$fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
     
     
+   $fileinfo = array(
+    'component' => 'mod_game',     // usually = table name
+    'filearea' => 'content',     // usually = table name
+    'itemid' => 0,               // usually = ID of row in table
+    'contextid' => 469, // ID of context
+    'filepath' => '/',           // any path beginning and ending in /
+    'filename' => 'game.zip'); // any filename
+
+    // Get file
+    $myfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+                      $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
    
+    $files = $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
    
-   
-   
-   
+    die($files);
     // die($files);
     // if ($files = $fs->get_area_files($context->id, 'mod_game', 'content', '0', 'sortorder', false)) {
     //         // Look through each file being managed
@@ -128,9 +142,7 @@ if ($redirect && !$forceview) {
     // // die($CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
     // $zip = new ZipArchive;
     // if ($zip->open($file->get_filepath().$file->get_filename(), ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE)) {
-
-
-
+    //     die($zip->filename);
     //     $zip->extractTo('./games/'.explode(".", $file->get_filename())[0]);
     //     $zip->close();
     //     echo 'ok';
