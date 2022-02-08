@@ -139,7 +139,7 @@ function game_display_frame($game, $cm, $course, $file) {
         die;
 
     } else {
-        $config = get_config('game');
+        $config = get_config('resource');
         $context = context_module::instance($cm->id);
         $path = '/'.$context->id.'/mod_game/content/'.$game->revision.$file->get_filepath().$file->get_filename();
         $fileurl = file_encode_url($CFG->wwwroot.'/pluginfile.php', $path, false);
@@ -533,6 +533,7 @@ class game_content_file_info extends file_info_stored {
     }
 }
 
+// add to file table
 function game_set_mainfile($data) {
     global $DB;
     $fs = get_file_storage();

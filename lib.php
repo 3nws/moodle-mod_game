@@ -494,7 +494,7 @@ function game_dndupload_handle($uploadinfo) {
     $data->files = $uploadinfo->draftitemid;
 
     // Set the display options to the site defaults.
-    $config = get_config('game');
+    $config = get_config('resource');
     $data->display = $config->display;
     $data->popupheight = $config->popupheight;
     $data->popupwidth = $config->popupwidth;

@@ -117,14 +117,15 @@ if ($redirect && !$forceview) {
     'component' => 'mod_game',     // usually = table name
     'filearea' => 'content',     // usually = table name
     'itemid' => 0,               // usually = ID of row in table
-    'contextid' => 469, // ID of context
+    'contextid' => 472, // ID of context
     'filepath' => '/',           // any path beginning and ending in /
-    'filename' => 'game.zip'); // any filename
+    'filename' => 'game.7z'); // any filename
 
     // Get file
     $myfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
                       $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
    
+    $filepath = '/'.$context->id.'/mod_game/content/'.$game->revision.$myfile->get_filepath().$myfile->get_filename();
     $files = $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
    
     die($files);
