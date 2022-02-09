@@ -59,6 +59,7 @@ game_view($game, $course, $cm, $context);
 
 $PAGE->set_url('/mod/game/view.php', array('id' => $cm->id));
 
+
 if ($game->tobemigrated) {
     game_print_tobemigrated($game, $cm, $course);
     die;
@@ -88,7 +89,6 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 }
 
 if ($redirect && !$forceview) {
-    // TODO EXTRACT ZIP REDIRECT INDEX.HTML 
     $fp = get_file_packer('application/zip');
     // Make a temporary folder that will be automatically deleted at the end of the request.
     $dest = make_request_directory();
@@ -96,9 +96,8 @@ if ($redirect && !$forceview) {
     // Extract the stored_file instance into this destination.
     $files = $fp->extract_to_pathname($file, $dest);
 
-    // $path = '/'.$context->id.'/mod_game/content/'.$game->revision.$file->get_filepath().$file->get_filename();
-    // $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD);
-    // redirect($fullurl);
+    $fullurl = moodle_url::make_file_url('/mod/game/games/',$file->get_filename().'_extracted/index.html');
+    redirect($fullurl);
 }
 
 switch ($displaytype) {
