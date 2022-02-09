@@ -89,70 +89,12 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 
 if ($redirect && !$forceview) {
     // TODO EXTRACT ZIP REDIRECT INDEX.HTML 
-    // die($file->get_filepath().$file->get_filename());
-
-    // Read contents
-    // if ($zip) {
-    //     $contents = $zip->get_content();
-    // } else {
-    //     // file doesn't exist - do something
-    // }
-
-    // die($a);
     $fp = get_file_packer('application/zip');
-    // die($a->get_content());
-    $filepath = $file->get_filepath().$file->get_filename();
-    $filepath = '/'.$context->id.'/mod_game/content/'.$game->revision.$file->get_filepath().$file->get_filename();
-    // $url = moodle_url::make_file_url('/pluginfile.php', $filepath, $displaytype == RESOURCELIB_DISPLAY_OPEN);
-    // $files = $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
-    // redirect($url);
-    // die($filepath);
-    // // die($files);
-
-    // serves the file nothing more
-    //$fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-    
-    
-   $fileinfo = array(
-    'component' => 'mod_game',     // usually = table name
-    'filearea' => 'content',     // usually = table name
-    'itemid' => 0,               // usually = ID of row in table
-    'contextid' => 472, // ID of context
-    'filepath' => '/',           // any path beginning and ending in /
-    'filename' => 'game.7z'); // any filename
-
-    // Get file
-    $myfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-                      $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-   
-    $filepath = '/'.$context->id.'/mod_game/content/'.$game->revision.$myfile->get_filepath().$myfile->get_filename();
-    $files = $fp->extract_to_pathname($filepath, $CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
-   
-    die($files);
-    // die($files);
-    // if ($files = $fs->get_area_files($context->id, 'mod_game', 'content', '0', 'sortorder', false)) {
-    //         // Look through each file being managed
-    //         foreach ($files as $file) {
-    //         // Build the File URL. Long process! But extremely accurate.
-    //             $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-    //             die($fileurl);
-    //         }
-    //     } else {
-    //         echo '<p>Please upload an image first</p>';
-    //     }
-    // // die($CFG->dirroot.'/mod/game/games'.$filepath.'_extracted');
-    // $zip = new ZipArchive;
-    // if ($zip->open($file->get_filepath().$file->get_filename(), ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE)) {
-    //     die($zip->filename);
-    //     $zip->extractTo('./games/'.explode(".", $file->get_filename())[0]);
-    //     $zip->close();
-    //     echo 'ok';
-    // } else {
-    //     echo 'failed';
-    // }
-
-
-
+    // Make a temporary folder that will be automatically deleted at the end of the request.
+    $dest = make_request_directory();
+    $dest = $CFG->dirroot.'/mod/game/games/'.$file->get_filename().'_extracted';
+    // Extract the stored_file instance into this destination.
+    $files = $fp->extract_to_pathname($file, $dest);
 
     // $path = '/'.$context->id.'/mod_game/content/'.$game->revision.$file->get_filepath().$file->get_filename();
     // $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD);
