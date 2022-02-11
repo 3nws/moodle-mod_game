@@ -96,8 +96,18 @@ if ($redirect && !$forceview) {
     // Extract the stored_file instance into this destination.
     $files = $fp->extract_to_pathname($file, $dest);
 
-    $fullurl = moodle_url::make_file_url('/mod/game/games/',$file->get_filename().'_extracted/index.html');
-    redirect($fullurl);
+    $templatecontext = [
+        'name' => 'FPSgameu',
+        'width' => '1440',
+        'height' => '720',
+        'build_path' => "games/".$file->get_filename()."_extracted/Build",
+    ];
+    $PAGE->set_title($templatecontext['name']);
+    echo $OUTPUT->header();
+    echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
+    echo $OUTPUT->footer();
+    // $fullurl = moodle_url::make_file_url('/mod/game/games/',$file->get_filename().'_extracted/index.html');
+    // redirect($fullurl);
 }
 
 switch ($displaytype) {
@@ -108,7 +118,7 @@ switch ($displaytype) {
         game_display_frame($game, $cm, $course, $file);
         break;
     default:
-        game_print_workaround($game, $cm, $course, $file);
+        // game_print_workaround($game, $cm, $course, $file);
         break;
 }
 
