@@ -63,8 +63,10 @@ class mod_game_mod_form extends moodleform_mod {
 
         $resolution_options = array();
         $resolution_options['0'] = "1600x900";
-        $resolution_options['1'] = "1440x900";
+        $resolution_options['1'] = "1440x810";
         $resolution_options['2'] = "1280x720";
+        $resolution_options['3'] = "854x480";
+        $resolution_options['4'] = "640x360";
 
 
         $mform->addElement('select', 'resolution', get_string('resolution', 'game'), $resolution_options);
