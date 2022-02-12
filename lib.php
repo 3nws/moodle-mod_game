@@ -120,7 +120,7 @@ function game_add_instance($data, $mform) {
  */
 function game_update_instance($data, $mform) {
     global $CFG, $DB;
-    require_once("$CFG->libdir/gamelib.php");
+    require_once("$CFG->libdir/resourcelib.php");
     $data->timemodified = time();
     $data->id           = $data->instance;
     $data->revision++;
@@ -397,7 +397,7 @@ function game_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
             if ($game->legacyfiles != RESOURCELIB_LEGACYFILES_ACTIVE) {
                 return false;
             }
-            if (!$file = gamelib_try_file_migration('/'.$relativepath, $cm->id, $cm->course, 'mod_game', 'content', 0)) {
+            if (!$file = resourcelib_try_file_migration('/'.$relativepath, $cm->id, $cm->course, 'mod_game', 'content', 0)) {
                 return false;
             }
             // file migrate - update flag
