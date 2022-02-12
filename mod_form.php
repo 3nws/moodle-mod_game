@@ -60,6 +60,15 @@ class mod_game_mod_form extends moodleform_mod {
         $attributes = $element->getAttributes();
         $attributes['rows'] = 5;
         $element->setAttributes($attributes);
+
+        $resolution_options = array();
+        $resolution_options['0'] = "1600x900";
+        $resolution_options['1'] = "1440x900";
+        $resolution_options['2'] = "1280x720";
+
+
+        $mform->addElement('select', 'resolution', get_string('resolution', 'game'), $resolution_options);
+
         $filemanager_options = array();
         $filemanager_options['accepted_types'] = '*';
         $filemanager_options['maxbytes'] = 0;

@@ -108,6 +108,7 @@ $string['gamedetails_typedate'] = '{$a->type} {$a->date}';
 $string['gamedetails_sizetypedate'] = '{$a->size} {$a->type} {$a->date}';
 $string['game:exportgame'] = 'Export game';
 $string['game:view'] = 'View game';
+$string['resolution'] = 'Resolution';
 $string['search:activity'] = 'File';
 $string['selectmainfile'] = 'Please select the main file by clicking the icon next to file name.';
 $string['showdate'] = 'Show upload/modified date';

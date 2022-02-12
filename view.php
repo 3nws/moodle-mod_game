@@ -96,12 +96,20 @@ if ($redirect && !$forceview) {
     // Extract the stored_file instance into this destination.
     $files = $fp->extract_to_pathname($file, $dest);
 
+    $resolution_options = array();
+    $resolution_options['0'] = "1600x900";
+    $resolution_options['1'] = "1440x900";
+    $resolution_options['2'] = "1280x720";
+    
+    $width_height = explode("x", $resolution_options[$game->resolution]);
+
     $templatecontext = [
         'name' => 'FPSgameu',
-        'width' => '1440',
-        'height' => '720',
+        'width' => $width_height[0],
+        'height' => $width_height[1],
         'build_path' => "games/".$file->get_filename()."_extracted/Build",
     ];
+    
     $PAGE->set_title($templatecontext['name']);
     echo $OUTPUT->header();
     echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
