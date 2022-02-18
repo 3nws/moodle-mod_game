@@ -94,7 +94,7 @@ if ($redirect && !$forceview) {
     // $dest = make_request_directory();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
     // Extract the stored_file instance into this destination.
-    $files = $fp->extract_to_pathname($file, $dest);
+    $files = !file_exists($dest.'/') ? $fp->extract_to_pathname($file, $dest) : null;
 
     $resolution_options = game_get_resolutions();
     
@@ -108,7 +108,7 @@ if ($redirect && !$forceview) {
         'name' => $game->name,
         'width' => $width_height[0],
         'height' => $width_height[1],
-        'build_path' => "games/".$file->get_filename()."_extracted/Build",
+        'build_path' => "games/".$game->name."_extracted/Build",
         'grade' => $is_results_empty ? $results[0]->grade : '',
         'score' => $is_results_empty ? $results[0]->score : '',
         'results_not_empty' => $is_results_empty,
