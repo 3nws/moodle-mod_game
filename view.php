@@ -100,7 +100,7 @@ if ($redirect && !$forceview) {
     
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
-    // TODO will need to check if it exists 
+    // TODO will need to add to database if a new result is available
     $results = game_get_results($game, $dest);
     $is_results_empty = !$results ? !empty($results) : true;
 
