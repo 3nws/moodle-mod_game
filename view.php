@@ -92,7 +92,7 @@ if ($redirect && !$forceview) {
     $fp = get_file_packer('application/zip');
     // Make a temporary folder that will be automatically deleted at the end of the request.
     $dest = make_request_directory();
-    $dest = $CFG->dirroot.'/mod/game/games/'.$file->get_filename().'_extracted';
+    $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
     // Extract the stored_file instance into this destination.
     $files = $fp->extract_to_pathname($file, $dest);
 
