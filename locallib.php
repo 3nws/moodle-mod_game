@@ -29,6 +29,8 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+
+// Return an array of resolution options for mod_game form
 function game_get_resolutions(){
     $resolution_options = array();
     $resolution_options['0'] = "1600x900";
