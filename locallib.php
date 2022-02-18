@@ -29,6 +29,16 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+// Return a json object consisting of game results
+function game_get_results($game, $dest){
+    // TODO will need to check if it exists 
+    $dest = $dest.'/results.json';
+    if ($flag = file_exists($dest)){
+        $data = file_get_contents($dest); 
+        $obj = json_decode($data); 
+        return $flag ? $obj : false;
+    }
+}
 
 // Return an array of resolution options for mod_game form
 function game_get_resolutions(){

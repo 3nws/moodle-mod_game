@@ -46,6 +46,14 @@
         <div id="unity-build-title"></div>
       </div>
     </div>
+    <div>
+      {{#results_not_empty}}
+        <ul>
+          <li>{{ grade }}</li>
+          <li>{{ score }}</li>
+        </ul>
+      {{/results_not_empty}}
+    </div>
     <script>
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");

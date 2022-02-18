@@ -91,7 +91,7 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 if ($redirect && !$forceview) {
     $fp = get_file_packer('application/zip');
     // Make a temporary folder that will be automatically deleted at the end of the request.
-    $dest = make_request_directory();
+    // $dest = make_request_directory();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
     // Extract the stored_file instance into this destination.
     $files = $fp->extract_to_pathname($file, $dest);
@@ -100,11 +100,18 @@ if ($redirect && !$forceview) {
     
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
+    // TODO will need to check if it exists 
+    $results = game_get_results($game, $dest);
+    $is_results_empty = !$results ? !empty($results) : true;
+
     $templatecontext = [
         'name' => $game->name,
         'width' => $width_height[0],
         'height' => $width_height[1],
         'build_path' => "games/".$file->get_filename()."_extracted/Build",
+        'grade' => $is_results_empty ? $results[0]->grade : '',
+        'score' => $is_results_empty ? $results[0]->score : '',
+        'results_not_empty' => $is_results_empty,
     ];
 
     $PAGE->set_title($templatecontext['name']);
