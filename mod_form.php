@@ -61,13 +61,7 @@ class mod_game_mod_form extends moodleform_mod {
         $attributes['rows'] = 5;
         $element->setAttributes($attributes);
 
-        $resolution_options = array();
-        $resolution_options['0'] = "1600x900";
-        $resolution_options['1'] = "1440x810";
-        $resolution_options['2'] = "1280x720";
-        $resolution_options['3'] = "854x480";
-        $resolution_options['4'] = "640x360";
-
+        $resolution_options = game_get_resolutions();
 
         $mform->addElement('select', 'resolution', get_string('resolution', 'game'), $resolution_options);
 
@@ -78,6 +72,7 @@ class mod_game_mod_form extends moodleform_mod {
         $filemanager_options['mainfile'] = true;
 
         $mform->addElement('filemanager', 'files', get_string('selectfiles'), null, $filemanager_options);
+        $mform->addRule('files', null, 'required', null, 'client');
 
         // add legacy files flag only if used
         if (isset($this->current->legacyfiles) and $this->current->legacyfiles != RESOURCELIB_LEGACYFILES_NO) {

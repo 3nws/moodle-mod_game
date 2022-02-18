@@ -29,6 +29,18 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+function game_get_resolutions(){
+    $resolution_options = array();
+    $resolution_options['0'] = "1600x900";
+    $resolution_options['1'] = "1440x810";
+    $resolution_options['2'] = "1280x720";
+    $resolution_options['3'] = "854x480";
+    $resolution_options['4'] = "640x360";
+    
+    return $resolution_options;
+}
+
+
 /**
  * Redirected to migrated game if needed,
  * return if incorrect parameters specified

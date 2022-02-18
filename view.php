@@ -96,12 +96,7 @@ if ($redirect && !$forceview) {
     // Extract the stored_file instance into this destination.
     $files = $fp->extract_to_pathname($file, $dest);
 
-    $resolution_options = array();
-    $resolution_options['0'] = "1600x900";
-    $resolution_options['1'] = "1440x810";
-    $resolution_options['2'] = "1280x720";
-    $resolution_options['3'] = "854x480";
-    $resolution_options['4'] = "640x360";
+    $resolution_options = game_get_resolutions();
     
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
