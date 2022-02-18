@@ -93,7 +93,7 @@ if ($redirect && !$forceview) {
     // Make a temporary folder that will be automatically deleted at the end of the request.
     // $dest = make_request_directory();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
-    // Extract the stored_file instance into this destination.
+    // Extract the stored_file instance into this destination if it doesn't already exist
     $files = !file_exists($dest.'/') ? $fp->extract_to_pathname($file, $dest) : null;
 
     $resolution_options = game_get_resolutions();
