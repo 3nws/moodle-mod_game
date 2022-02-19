@@ -61,9 +61,21 @@ class mod_game_mod_form extends moodleform_mod {
         $attributes['rows'] = 5;
         $element->setAttributes($attributes);
 
+        $mform->addElement('text', 'topic', get_string('relatedtopic', 'game'), array('size'=>'64'));
+        if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('topic', PARAM_TEXT);
+        } else {
+            $mform->setType('topic', PARAM_CLEANHTML);
+        }
+        $mform->addRule('topic', null, 'required', null, 'client');
+
         $resolution_options = game_get_resolutions();
 
+        $game_options = game_get_games();
+
         $mform->addElement('select', 'resolution', get_string('resolution', 'game'), $resolution_options);
+
+        $mform->addElement('select', 'gameoption', get_string('game:option', 'game'), $game_options);
 
         $filemanager_options = array();
         $filemanager_options['accepted_types'] = '*';

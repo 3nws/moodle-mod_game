@@ -52,6 +52,17 @@ function game_get_resolutions(){
     return $resolution_options;
 }
 
+// Return an array of game options for mod_game form
+function game_get_games(){
+    $game_options = array();
+    $game_options['0'] = "Game 1";
+    $game_options['1'] = "Game 2";
+    $game_options['2'] = "Game 3";
+    $game_options['3'] = "Game 4";
+    $game_options['4'] = "Game 5";
+    
+    return $game_options;
+}
 
 /**
  * Redirected to migrated game if needed,
