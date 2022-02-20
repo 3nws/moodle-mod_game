@@ -36,7 +36,7 @@ function game_get_results($game, $dest){
     if ($flag = file_exists($dest)){
         $data = file_get_contents($dest); 
         $obj = json_decode($data); 
-        return $flag ? $obj : false;
+        return $flag ? $obj[0] : false;
     }
 }
 

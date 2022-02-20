@@ -19,7 +19,6 @@
  * Resource module version information
  *
  * @package    mod_game
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -89,10 +88,28 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 }
 
 if ($redirect && !$forceview) {
+    global $DB, $USER;
+    $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // $data = new stdClass();
+        $data = game_get_results($game, $dest);
+        // add to db here
+        if ($data){
+            $data->course = $course->id;
+            $data->name = $game->name." result";
+            $data->passornot = 1;
+            $data->timemodified = time();
+            $data->userid = $USER->id;
+            $data->gameid = $game->id;
+            $data->cmid = $cm->id;
+            $DB->insert_record('game_results', $data);
+        }else{
+            die("No results exported");
+        }
+    }
     $fp = get_file_packer('application/zip');
     // Make a temporary folder that will be automatically deleted at the end of the request.
     // $dest = make_request_directory();
-    $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
     // Extract the stored_file instance into this destination if it doesn't already exist
     $files = !file_exists($dest.'/') ? $fp->extract_to_pathname($file, $dest) : null;
 
@@ -100,24 +117,28 @@ if ($redirect && !$forceview) {
     
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
-    // TODO will need to add to database if a new result is available
+    // TODO read results from DB instead
     $results = game_get_results($game, $dest);
     $is_results_empty = !$results ? !empty($results) : true;
+
+    $formaction = $PAGE->url;
 
     $templatecontext = [
         'name' => $game->name,
         'width' => $width_height[0],
         'height' => $width_height[1],
         'build_path' => "games/".$game->name."_extracted/Build",
-        'grade' => $is_results_empty ? $results[0]->grade : '',
-        'score' => $is_results_empty ? $results[0]->score : '',
+        'grade' => $is_results_empty ? $results->grade : '',
+        'score' => $is_results_empty ? $results->score : '',
         'results_not_empty' => $is_results_empty,
+        'formaction' => $formaction,
     ];
 
-    $PAGE->set_title($templatecontext['name']);
+    $PAGE->set_title($game->name);
     echo $OUTPUT->header();
     echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
     echo $OUTPUT->footer();
+    
     // $fullurl = moodle_url::make_file_url('/mod/game/games/',$file->get_filename().'_extracted/index.html');
     // redirect($fullurl);
 }
