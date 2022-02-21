@@ -29,8 +29,28 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+// Return result entries from db
+function game_get_results(){
+    global $DB, $USER;
+
+    // Selects results that match the current user and the game
+    $sql_query =   "SELECT rs.id, rs.grade, rs.score 
+                    FROM {game_results} rs 
+                    LEFT OUTER JOIN {game} g 
+                    ON g.id = rs.gameid 
+                    WHERE rs.userid = :user_id OR rs.userid IS NULL
+                    ORDER BY rs.score DESC;";
+
+    $params = [
+        'user_id' => $USER->id,
+    ];
+
+    $results = $DB->get_records_sql($sql_query, $params);
+    return $results;
+}
+
 // Return a json object consisting of game results
-function game_get_results($game, $dest){
+function game_get_local_results($game, $dest){
     // TODO will need to check if it exists 
     $dest = $dest.'/results.json';
     if ($flag = file_exists($dest)){

@@ -90,9 +90,10 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 if ($redirect && !$forceview) {
     global $DB, $USER;
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
+    // Gets the newly exported scores on local and inserts them to the database
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // $data = new stdClass();
-        $data = game_get_results($game, $dest);
+        $data = game_get_local_results($game, $dest);
         // add to db here
         if ($data){
             $data->course = $course->id;
@@ -118,18 +119,27 @@ if ($redirect && !$forceview) {
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
     // TODO read results from DB instead
-    $results = game_get_results($game, $dest);
+    $results = game_get_results();
+    // die($results);
     $is_results_empty = !$results ? !empty($results) : true;
 
     $formaction = $PAGE->url;
+    
+    $highest_scored_record = new stdClass();
 
+    // DON'T ASK!!
+    foreach ($results as $rs){
+        $highest_scored_record = $rs;
+        break;
+    }
+    
     $templatecontext = [
         'name' => $game->name,
         'width' => $width_height[0],
         'height' => $width_height[1],
         'build_path' => "games/".$game->name."_extracted/Build",
-        'grade' => $is_results_empty ? $results->grade : '',
-        'score' => $is_results_empty ? $results->score : '',
+        'grade' => $is_results_empty ? $highest_scored_record->grade : '',
+        'score' => $is_results_empty ? $highest_scored_record->score : '',
         'results_not_empty' => $is_results_empty,
         'formaction' => $formaction,
     ];
