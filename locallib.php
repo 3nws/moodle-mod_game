@@ -53,7 +53,6 @@ function game_get_results($game){
 
 // Return a json object consisting of game results
 function game_get_local_results($game, $dest){
-    // TODO will need to check if it exists 
     $dest = $dest.'/results.json';
     if ($flag = file_exists($dest)){
         $data = file_get_contents($dest); 
