@@ -137,7 +137,7 @@ if ($redirect && !$forceview) {
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
     // TODO read results from DB instead
-    $results = game_get_results();
+    $results = game_get_results($game);
     $results = array_values($results);
     // die($results);
     $is_results_empty = !$results ? !empty($results) : true;

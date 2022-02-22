@@ -30,21 +30,23 @@ require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
 // Return result entries from db
-function game_get_results(){
+function game_get_results($game){
     global $DB, $USER;
 
     // Selects results that match the current user and the game
     $sql_query =   "SELECT rs.id, rs.grade, rs.score 
                     FROM {game_results} rs 
                     LEFT OUTER JOIN {game} g 
-                    ON g.id = rs.gameid 
-                    WHERE rs.userid = :user_id OR rs.userid IS NULL
+                    ON rs.gameid = :game_id
+                    WHERE rs.userid = :user_id AND rs.gameid = :game_id1
                     ORDER BY rs.score DESC;";
 
     $params = [
         'user_id' => $USER->id,
+        'game_id' => $game->id,
+        'game_id1' => $game->id,
     ];
-
+    
     $results = $DB->get_records_sql($sql_query, $params);
     return $results;
 }
