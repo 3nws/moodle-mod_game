@@ -103,9 +103,27 @@ if ($redirect && !$forceview) {
             $data->userid = $USER->id;
             $data->gameid = $game->id;
             $data->cmid = $cm->id;
-            $DB->insert_record('game_results', $data);
+            $sql_query =   "SELECT rs.id, rs.grade, rs.score 
+                            FROM {game_results} rs 
+                            LEFT OUTER JOIN {game} g 
+                            ON g.id = rs.gameid 
+                            WHERE rs.userid = :user_id AND rs.score = :score
+                            ORDER BY rs.score DESC;";
+
+            $params = [
+                'user_id' => $USER->id,
+                'score' => $data->score,
+            ];
+        
+            $exact_matches = $DB->get_records_sql($sql_query, $params);
+            
+            if (!empty(array_values(($exact_matches)))){
+                \core\notification::add(get_string('duplicatewarning', 'game'), \core\output\notification::NOTIFY_WARNING);
+            }else{
+                $DB->insert_record('game_results', $data);
+            }
         }else{
-            die("No results exported");
+            \core\notification::add(get_string('exportjson', 'game'), \core\output\notification::NOTIFY_WARNING);
         }
     }
     $fp = get_file_packer('application/zip');
@@ -120,6 +138,7 @@ if ($redirect && !$forceview) {
 
     // TODO read results from DB instead
     $results = game_get_results();
+    $results = array_values($results);
     // die($results);
     $is_results_empty = !$results ? !empty($results) : true;
 
@@ -127,19 +146,25 @@ if ($redirect && !$forceview) {
     
     $highest_scored_record = new stdClass();
 
-    // DON'T ASK!!
-    foreach ($results as $rs){
-        $highest_scored_record = $rs;
-        break;
-    }
+    // highest_scored_record = $results[0];
+    // die($results[1]->score);
+    // die(var_dump($results));    WHOSE IDEA WAS IT TWO MAKE ARRAYS START FROM INDEX 1 OR WAS IT MY MISTAKE?!!
+    // $results=array();
+    // foreach ( $results_with_wrong_indexes as $key => $val ){
+    //     $results[ $key-1 ] = $val;
+    // }
+    // die(var_dump($results));
     
+    
+
     $templatecontext = [
         'name' => $game->name,
         'width' => $width_height[0],
         'height' => $width_height[1],
         'build_path' => "games/".$game->name."_extracted/Build",
-        'grade' => $is_results_empty ? $highest_scored_record->grade : '',
-        'score' => $is_results_empty ? $highest_scored_record->score : '',
+        'results' => $is_results_empty ? $results : new stdClass(),
+        // 'highest_grade' => $is_results_empty ? $highest_scored_record->grade : '',
+        // 'highest_score' => $is_results_empty ? $highest_scored_record->score : '',
         'results_not_empty' => $is_results_empty,
         'formaction' => $formaction,
     ];

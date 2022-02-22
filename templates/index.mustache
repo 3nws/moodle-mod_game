@@ -47,15 +47,30 @@
       </div>
     </div>
     <div>
-      {{#results_not_empty}}
-        <ul>
-          <li>{{ grade }}</li>
-          <li>{{ score }}</li>
-        </ul>
-      {{/results_not_empty}}
       <form action="{{ formaction }}" method="post">
-        <button class="btn btn-primary">Submit</button>
+        <button class="btn btn-primary">Submit your new score!</button>
       </form>
+    </div>
+    <div>
+      {{#results_not_empty}}
+      <table class="table table-sm table-hover">
+        <caption>Your scores</caption>
+        <thead>
+          <tr>
+            <th scope="col">Score</th>
+            <th scope="col">Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#results}}
+          <tr>
+            <td>{{ score }}</td>
+            <td>{{ grade }}</td>
+          </tr>
+          {{/results}}
+        </tbody>
+      </table>
+      {{/results_not_empty}}
     </div>
     <script>
       var container = document.querySelector("#unity-container");

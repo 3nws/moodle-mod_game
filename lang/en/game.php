@@ -52,8 +52,10 @@ $string['displayselect_help'] = 'This setting, together with the file type and w
 * New window - The file is displayed in a new browser window with menus and an address bar';
 $string['displayselect_link'] = 'mod/file/mod';
 $string['displayselectexplain'] = 'Choose display type, unfortunately not all types are suitable for all files.';
+$string['duplicatewarning'] = 'You already have submitted a similar score.';
 $string['dnduploadgame'] = 'Create file game';
 $string['encryptedcode'] = 'Encrypted code';
+$string['exportjson'] = 'It seems the game has not sent your results correctly. ';
 $string['filenotfound'] = 'File not found, sorry.';
 $string['filterfiles'] = 'Use filters on file content';
 $string['filterfilesexplain'] = 'Select type of file content filtering, please note this may cause problems for some Flash and Java applets. Please make sure that all text files are in UTF-8 encoding.';
