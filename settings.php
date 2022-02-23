@@ -18,7 +18,7 @@
 /**
  * Resource module admin settings and defaults
  *
- * @package    mod_resource
+ * @package    mod_game
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
