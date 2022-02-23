@@ -19,6 +19,7 @@
  * Private game module utility functions
  *
  * @package    mod_game
+ * @copyright  2009 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
