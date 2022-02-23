@@ -28,7 +28,7 @@ require_once($CFG->dirroot.'/mod/game/locallib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
 $id       = optional_param('id', 0, PARAM_INT); // Course Module ID
-$r        = optional_param('r', 0, PARAM_INT);  // Resource instance ID
+$r        = optional_param('r', 0, PARAM_INT);  // Game instance ID
 $redirect = optional_param('redirect', 0, PARAM_BOOL);
 $forceview = optional_param('forceview', 0, PARAM_BOOL);
 

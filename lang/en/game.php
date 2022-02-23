@@ -120,10 +120,12 @@ $string['showdate_desc'] = 'Display upload/modified date on course page?';
 $string['showdate_help'] = 'Displays the upload/modified date beside links to the file.
 
 If there are multiple files in this game, the start file upload/modified date is displayed.';
+$string['showresults'] = 'Show results';
 $string['showsize'] = 'Show size';
 $string['showsize_help'] = 'Displays the file size, such as \'3.1 MB\', beside links to the file.
 
 If there are multiple files in this game, the total size of all files is displayed.';
+$string['showresults_desc'] = 'Display the results on course page?';
 $string['showsize_desc'] = 'Display file size on course page?';
 $string['showtype'] = 'Show type';
 $string['showtype_desc'] = 'Display file type (e.g. \'Word document\') on course page?';

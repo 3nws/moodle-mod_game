@@ -19,7 +19,6 @@
  * Private game module utility functions
  *
  * @package    mod_game
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,6 +28,31 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+// Return a string with the results processed
+function display_results($game){
+    global $DB, $USER;
+    
+    // Selects results that match the current user and the game gets the highest scored entry
+    $sql_query =   "SELECT rs.id, rs.grade, rs.score 
+                    FROM {game_results} rs 
+                    WHERE rs.userid = :user_id AND rs.gameid = :game_id
+                    ORDER BY rs.score DESC
+                    LIMIT 1;";
+
+    $params = [
+        'user_id' => $USER->id,
+        'game_id' => $game->id,
+    ];
+    
+    $results = $DB->get_records_sql($sql_query, $params);
+    
+    $is_results_empty = !$results ? !empty($results) : true;
+
+    $display_message = $is_results_empty ? "Your score: ". array_values($results)[0]->score : "You have no score!";
+
+    return $display_message;
+}
+
 // Return result entries from db
 function game_get_results($game){
     global $DB, $USER;
@@ -36,15 +60,12 @@ function game_get_results($game){
     // Selects results that match the current user and the game
     $sql_query =   "SELECT rs.id, rs.grade, rs.score 
                     FROM {game_results} rs 
-                    LEFT OUTER JOIN {game} g 
-                    ON rs.gameid = :game_id
-                    WHERE rs.userid = :user_id AND rs.gameid = :game_id1
+                    WHERE rs.userid = :user_id AND rs.gameid = :game_id
                     ORDER BY rs.score DESC;";
 
     $params = [
         'user_id' => $USER->id,
         'game_id' => $game->id,
-        'game_id1' => $game->id,
     ];
     
     $results = $DB->get_records_sql($sql_query, $params);
@@ -351,7 +372,7 @@ function game_print_heading($game, $cm, $course, $notused = false) {
 function game_get_file_details($game, $cm) {
     $options = empty($game->displayoptions) ? [] : (array) unserialize_array($game->displayoptions);
     $filedetails = array();
-    if (!empty($options['showsize']) || !empty($options['showtype']) || !empty($options['showdate'])) {
+    if (!empty($options['showresults']) || !empty($options['showsize']) || !empty($options['showtype']) || !empty($options['showdate'])) {
         $context = context_module::instance($cm->id);
         $fs = get_file_storage();
         $files = $fs->get_area_files($context->id, 'mod_game', 'content', 0, 'sortorder DESC, id ASC', false);
@@ -359,6 +380,17 @@ function game_get_file_details($game, $cm) {
         // and 0 for all other files. This sort approach is used just in case
         // there are situations where the file has a different sort order.
         $mainfile = $files ? reset($files) : null;
+        if (!empty($options['showresults'])) {
+            $filedetails['size'] = 0;
+            foreach ($files as $file) {
+                // This will also synchronize the file size for external files if needed.
+                $filedetails['size'] += $file->get_filesize();
+                if ($file->get_repository_id()) {
+                    // If file is a reference the 'size' attribute can not be cached.
+                    $filedetails['isref'] = true;
+                }
+            }
+        }
         if (!empty($options['showsize'])) {
             $filedetails['size'] = 0;
             foreach ($files as $file) {
@@ -419,17 +451,23 @@ function game_get_optional_details($game, $cm) {
     $details = '';
 
     $options = empty($game->displayoptions) ? [] : (array) unserialize_array($game->displayoptions);
-    if (!empty($options['showsize']) || !empty($options['showtype']) || !empty($options['showdate'])) {
+    if (!empty($options['showresults']) || !empty($options['showsize']) || !empty($options['showtype']) || !empty($options['showdate'])) {
         if (!array_key_exists('filedetails', $options)) {
             $filedetails = game_get_file_details($game, $cm);
         } else {
             $filedetails = $options['filedetails'];
         }
+        $results = '';
         $size = '';
         $type = '';
         $date = '';
         $langstring = '';
         $infodisplayed = 0;
+        if (!empty($options['showresults'])) {
+            $results = display_results($game->game_obj);
+            $langstring .= 'results';
+            $infodisplayed += 1;
+        }
         if (!empty($options['showsize'])) {
             if (!empty($filedetails['size'])) {
                 $size = display_size($filedetails['size']);
@@ -458,10 +496,10 @@ function game_get_optional_details($game, $cm) {
 
         if ($infodisplayed > 1) {
             $details = get_string("gamedetails_{$langstring}", 'game',
-                    (object)array('size' => $size, 'type' => $type, 'date' => $date));
+                    (object)array('results' => $results, 'size' => $size, 'type' => $type, 'date' => $date));
         } else {
             // Only one of size, type and date is set, so just append.
-            $details = $size . $type . $date;
+            $details = $results. $size . $type . $date;
         }
     }
 

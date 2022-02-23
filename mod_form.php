@@ -19,7 +19,6 @@
  * Resource configuration form
  *
  * @package    mod_game
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -112,6 +111,9 @@ class mod_game_mod_form extends moodleform_mod {
             $mform->setDefault('display', $config->display);
             $mform->addHelpButton('display', 'displayselect', 'game');
         }
+        
+        $mform->addElement('checkbox', 'showresults', get_string('showresults', 'game'));
+        $mform->setDefault('showresults', 0); // set to zero as default TODO fix this somehow
 
         $mform->addElement('checkbox', 'showsize', get_string('showsize', 'game'));
         $mform->setDefault('showsize', $config->showsize);
@@ -185,6 +187,13 @@ class mod_game_mod_form extends moodleform_mod {
             }
             if (!empty($displayoptions['popupheight'])) {
                 $default_values['popupheight'] = $displayoptions['popupheight'];
+            }
+            if (!empty($displayoptions['showresults'])) {
+                $default_values['showresults'] = $displayoptions['showresults'];
+            } else {
+                // Must set explicitly to 0 here otherwise it will use system
+                // default which may be 1.
+                $default_values['showresults'] = 0;
             }
             if (!empty($displayoptions['showsize'])) {
                 $default_values['showsize'] = $displayoptions['showsize'];

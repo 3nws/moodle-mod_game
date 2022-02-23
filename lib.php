@@ -17,7 +17,6 @@
 
 /**
  * @package    mod_game
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -152,6 +151,9 @@ function game_set_display_options($data) {
     if (in_array($data->display, array(RESOURCELIB_DISPLAY_AUTO, RESOURCELIB_DISPLAY_EMBED, RESOURCELIB_DISPLAY_FRAME))) {
         $displayoptions['printintro']   = (int)!empty($data->printintro);
     }
+    if (!empty($data->showresults)) {
+        $displayoptions['showresults'] = 1;
+    }
     if (!empty($data->showsize)) {
         $displayoptions['showsize'] = 1;
     }
@@ -268,10 +270,11 @@ function game_get_coursemodule_info($coursemodule) {
  * @param cm_info $cm Course module information
  */
 function game_cm_info_view(cm_info $cm) {
-    global $CFG;
+    global $CFG, $DB;
     require_once($CFG->dirroot . '/mod/game/locallib.php');
-
-    $game = (object) ['displayoptions' => $cm->customdata['displayoptions']];
+    
+    $game_obj = $DB->get_record('game', array('id'=>$cm->instance));
+    $game = (object) ['game_obj' => $game_obj, 'displayoptions' => $cm->customdata['displayoptions']];
     $details = game_get_optional_details($game, $cm);
     if ($details) {
         $cm->set_after_link(' ' . html_writer::tag('span', $details,
@@ -499,6 +502,7 @@ function game_dndupload_handle($uploadinfo) {
     $data->popupheight = $config->popupheight;
     $data->popupwidth = $config->popupwidth;
     $data->printintro = $config->printintro;
+    $data->showresults = (isset($config->showresults)) ? $config->showresults : 0;
     $data->showsize = (isset($config->showsize)) ? $config->showsize : 0;
     $data->showtype = (isset($config->showtype)) ? $config->showtype : 0;
     $data->showdate = (isset($config->showdate)) ? $config->showdate : 0;

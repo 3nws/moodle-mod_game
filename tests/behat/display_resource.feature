@@ -38,11 +38,12 @@ Feature: Teacher can specify different display options for the resource
   Scenario Outline: Specifying different display options for a file resource
     When I add a "File" to section "1"
     And I set the following fields to these values:
-      | Name                      | Myfile     |
-      | Display                   | Open       |
-      | Show size                 | <showsize> |
-      | Show type                 | <showtype> |
-      | Show upload/modified date | <showdate> |
+      | Name                      | Myfile        |
+      | Display                   | Open          |
+      | Show results              | <showresults> |
+      | Show size                 | <showsize>    |
+      | Show type                 | <showtype>    |
+      | Show upload/modified date | <showdate>    |
     And I upload "mod/resource/tests/fixtures/samplefile.txt" file to "Select files" filemanager
     And I press "Save and display"
     Then I <seesize> see "6 bytes" in the ".resourcedetails" "css_element"
@@ -55,11 +56,11 @@ Feature: Teacher can specify different display options for the resource
     And I log out
 
     Examples:
-      | showsize | showtype | showdate | seesize    | seetype    | seedate    |
-      | 1        | 0        | 0        | should     | should not | should not |
-      | 0        | 1        | 0        | should not | should     | should not |
-      | 0        | 0        | 1        | should not | should not | should     |
-      | 1        | 1        | 0        | should     | should     | should not |
-      | 1        | 0        | 1        | should     | should not | should     |
-      | 0        | 1        | 1        | should not | should     | should     |
-      | 1        | 1        | 1        | should     | should     | should     |
+    | showresults| showsize | showtype | showdate | seeresult  | seesize    | seetype    | seedate    |
+    | 1          | 1        | 0        | 0        | should     | should     | should not | should not |
+    | 0          | 0        | 1        | 0        | should not | should not | should     | should not |
+    | 0          | 0        | 0        | 1        | should not | should not | should not | should     |
+    | 1          | 1        | 1        | 0        | should     | should     | should     | should not |
+    | 1          | 1        | 0        | 1        | should     | should     | should not | should     |
+    | 0          | 0        | 1        | 1        | should not | should not | should     | should     |
+    | 1          | 1        | 1        | 1        | should     | should     | should     | should     |
