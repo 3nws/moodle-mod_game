@@ -46,10 +46,11 @@ function display_results($game){
     ];
     
     $results = $DB->get_records_sql($sql_query, $params);
-    
+    $topic = $game->topic;
     $is_results_empty = !$results ? !empty($results) : true;
-
-    $display_message = $is_results_empty ? "Your score: ". array_values($results)[0]->score : "You have no score!";
+    $score = $is_results_empty ? array_values($results)[0]->score : 0;
+    $message = $score>=70 ? ", <div style='color:green;'> good job!</div>" : ", <div style='color:red;'> please revise the topic ".$topic."!</div>";
+    $display_message = $is_results_empty ? "<strong>Your score is ". $score . $message."</strong>" : "<strong>You have no score!</strong>";
 
     return $display_message;
 }
