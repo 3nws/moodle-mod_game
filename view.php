@@ -106,8 +106,6 @@ if ($redirect && !$forceview) {
             $data->cmid = $cm->id;
             $sql_query =   "SELECT rs.id, rs.grade, rs.score 
                             FROM {game_results} rs 
-                            LEFT OUTER JOIN {game} g 
-                            ON g.id = rs.gameid 
                             WHERE rs.userid = :user_id AND rs.score = :score
                             ORDER BY rs.score DESC;";
 
