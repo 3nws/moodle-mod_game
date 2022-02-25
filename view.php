@@ -91,6 +91,9 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 if ($redirect && !$forceview) {
     global $DB, $USER;
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
+    // $dest = tempnam(sys_get_temp_dir(), 'moodlemodgame');
+    // unlink($dest);
+    // mkdir($dest);
     // Gets the newly exported scores on local and inserts them to the database
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // $data = new stdClass();
@@ -99,7 +102,7 @@ if ($redirect && !$forceview) {
         if ($data){
             $data->course = $course->id;
             $data->name = $game->name." result";
-            $data->passornot = 1;
+            $data->passornot = 1; // make dynamic
             $data->timemodified = time();
             $data->userid = $USER->id;
             $data->gameid = $game->id;
