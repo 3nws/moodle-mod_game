@@ -115,6 +115,7 @@ class mod_game_mod_form extends moodleform_mod {
         
         $mform->addElement('checkbox', 'showresults', get_string('showresults', 'game'));
         $mform->setDefault('showresults', 0); // set to zero as default TODO fix this somehow
+        $mform->addHelpButton('showresults', 'showresults', 'game');
 
         $mform->addElement('checkbox', 'showsize', get_string('showsize', 'game'));
         $mform->setDefault('showsize', $config->showsize);

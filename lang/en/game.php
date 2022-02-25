@@ -121,6 +121,7 @@ $string['showdate_help'] = 'Displays the upload/modified date beside links to th
 
 If there are multiple files in this game, the start file upload/modified date is displayed.';
 $string['showresults'] = 'Show results';
+$string['showresults_help'] = 'Displays the student\'s highest score, such as \'Your score is 88, good job!\', beside links to the game.';
 $string['showsize'] = 'Show size';
 $string['showsize_help'] = 'Displays the file size, such as \'3.1 MB\', beside links to the file.
 
