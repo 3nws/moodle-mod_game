@@ -90,6 +90,7 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 
 if ($redirect && !$forceview) {
     global $DB, $USER;
+    // TODO this should be a random temporary directory but it gets messed up because of the post request i'll fix it hopefully
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
     // Gets the newly exported scores on local and inserts them to the database
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
