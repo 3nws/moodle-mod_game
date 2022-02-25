@@ -91,9 +91,6 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 if ($redirect && !$forceview) {
     global $DB, $USER;
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
-    // $dest = tempnam(sys_get_temp_dir(), 'moodlemodgame');
-    // unlink($dest);
-    // mkdir($dest);
     // Gets the newly exported scores on local and inserts them to the database
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // $data = new stdClass();
@@ -122,15 +119,15 @@ if ($redirect && !$forceview) {
             if (!empty(array_values(($exact_matches)))){
                 \core\notification::add(get_string('duplicatewarning', 'game'), \core\output\notification::NOTIFY_WARNING);
             }else{
+                // delete the results file to reset after inserting the scores to the db
                 $DB->insert_record('game_results', $data);
+                unlink($dest.'/results.json');
             }
         }else{
             \core\notification::add(get_string('exportjson', 'game'), \core\output\notification::NOTIFY_WARNING);
         }
     }
     $fp = get_file_packer('application/zip');
-    // Make a temporary folder that will be automatically deleted at the end of the request.
-    // $dest = make_request_directory();
     // Extract the stored_file instance into this destination if it doesn't already exist
     $files = !file_exists($dest.'/') ? $fp->extract_to_pathname($file, $dest) : null;
 
@@ -138,10 +135,9 @@ if ($redirect && !$forceview) {
     
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
-    // TODO read results from DB instead
     $results = game_get_results($game);
     $results = array_values($results);
-    // die($results);
+    
     $is_results_empty = !$results ? !empty($results) : true;
 
     $formaction = $PAGE->url;
@@ -149,15 +145,6 @@ if ($redirect && !$forceview) {
     $highest_scored_record = new stdClass();
 
     // highest_scored_record = $results[0];
-    // die($results[1]->score);
-    // die(var_dump($results));    WHOSE IDEA WAS IT TWO MAKE ARRAYS START FROM INDEX 1 OR WAS IT MY MISTAKE?!!
-    // $results=array();
-    // foreach ( $results_with_wrong_indexes as $key => $val ){
-    //     $results[ $key-1 ] = $val;
-    // }
-    // die(var_dump($results));
-    
-    
 
     $templatecontext = [
         'name' => $game->name,
@@ -176,6 +163,7 @@ if ($redirect && !$forceview) {
     echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
     echo $OUTPUT->footer();
     
+    // for downloading the file
     // $fullurl = moodle_url::make_file_url('/mod/game/games/',$file->get_filename().'_extracted/index.html');
     // redirect($fullurl);
 }
