@@ -29,6 +29,21 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+// Removes a directory with the files it contains
+function remove_directory($path){
+    $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+    $files = new RecursiveIteratorIterator($it,
+                 RecursiveIteratorIterator::CHILD_FIRST);
+    foreach($files as $rs) {
+        if ($rs->isDir()){
+            rmdir($rs->getRealPath());
+        } else {
+            unlink($rs->getRealPath());
+        }
+    }
+    rmdir($path);
+}
+
 // Return a string with the results processed
 function display_results($game){
     global $DB, $USER;

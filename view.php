@@ -91,11 +91,13 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 if ($redirect && !$forceview) {
     global $DB, $USER;
     // TODO this should be a random temporary directory but it gets messed up because of the post request i'll fix it hopefully
-    $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.'_extracted';
+    $uniq = uniqid();
+    $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
     // Gets the newly exported scores on local and inserts them to the database
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // $data = new stdClass();
-        $data = game_get_local_results($game, $dest);
+        $old_dest = $_POST['dest'];
+        $data = game_get_local_results($game, $old_dest);
         // add to db here
         if ($data){
             $data->course = $course->id;
@@ -122,11 +124,11 @@ if ($redirect && !$forceview) {
             }else{
                 // delete the results file to reset after inserting the scores to the db
                 $DB->insert_record('game_results', $data);
-                unlink($dest.'/results.json');
             }
         }else{
             \core\notification::add(get_string('exportjson', 'game'), \core\output\notification::NOTIFY_WARNING);
         }
+        remove_directory($old_dest);
     }
     $fp = get_file_packer('application/zip');
     // Extract the stored_file instance into this destination if it doesn't already exist
@@ -151,12 +153,13 @@ if ($redirect && !$forceview) {
         'name' => $game->name,
         'width' => $width_height[0],
         'height' => $width_height[1],
-        'build_path' => "games/".$game->name."_extracted/Build",
+        'build_path' => "games/".$game->name.$uniq."/Build",
         'results' => $is_results_empty ? $results : new stdClass(),
         // 'highest_grade' => $is_results_empty ? $highest_scored_record->grade : '',
         // 'highest_score' => $is_results_empty ? $highest_scored_record->score : '',
         'results_not_empty' => $is_results_empty,
         'formaction' => $formaction,
+        'dest' => $dest,
     ];
 
     $PAGE->set_title($game->name);
