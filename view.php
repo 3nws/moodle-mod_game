@@ -52,7 +52,7 @@ $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
-// require_capability('mod/game:view', $context);
+require_capability('mod/game:view', $context);
 
 // Completion and trigger events.
 game_view($game, $course, $cm, $context);
@@ -88,7 +88,7 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
     $redirect = false;
 }
 
-if ($redirect && !$forceview) {
+if ($redirect) {
     global $DB, $USER;
     // TODO this should be a random temporary directory but it gets messed up because of the post request i'll fix it hopefully
     $uniq = uniqid();
@@ -164,6 +164,8 @@ if ($redirect && !$forceview) {
 
     $PAGE->set_title($game->name);
     echo $OUTPUT->header();
+    // download link for the game
+    echo game_get_clicktodownload($file, $game->revision);
     echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
     echo $OUTPUT->footer();
     
@@ -172,15 +174,15 @@ if ($redirect && !$forceview) {
     // redirect($fullurl);
 }
 
-switch ($displaytype) {
-    case RESOURCELIB_DISPLAY_EMBED:
-        game_display_embed($game, $cm, $course, $file);
-        break;
-    case RESOURCELIB_DISPLAY_FRAME:
-        game_display_frame($game, $cm, $course, $file);
-        break;
-    default:
-        // game_print_workaround($game, $cm, $course, $file);
-        break;
-}
+// switch ($displaytype) {
+//     case RESOURCELIB_DISPLAY_EMBED:
+//         game_display_embed($game, $cm, $course, $file);
+//         break;
+//     case RESOURCELIB_DISPLAY_FRAME:
+//         game_display_frame($game, $cm, $course, $file);
+//         break;
+//     default:
+//         game_print_workaround($game, $cm, $course, $file);
+//         break;
+// }
 

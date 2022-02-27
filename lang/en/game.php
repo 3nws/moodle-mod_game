@@ -77,15 +77,11 @@ $string['legacyfilesactive'] = 'Active';
 $string['legacyfilesdone'] = 'Finished';
 $string['modifieddate'] = 'Modified {$a}';
 $string['modulename'] = 'Game';
-$string['modulename_help'] = 'The file module enables a teacher to provide a file as a course game. Where possible, the file will be displayed within the course interface; otherwise students will be prompted to download it. The file may include supporting files, for example an HTML page may have embedded images.
+$string['modulename_help'] = 'The file module enables a teacher to provide a file as a course game. Where possible, the file will be displayed within the course interface.
 
 Note that students need to have the appropriate software on their computers in order to open the file.
 
-A file may be used
-
-* To share presentations given in class
-* To include a mini website as a course game
-* To provide draft files of software programs so students can edit and submit them for assessment';
+A file may be used to include a mini course game';
 $string['modulename_link'] = 'mod/game/view';
 $string['modulenameplural'] = 'Files';
 $string['notmigrated'] = 'This legacy game type ({$a}) was not yet migrated, sorry.';

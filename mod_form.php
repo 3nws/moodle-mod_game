@@ -78,9 +78,9 @@ class mod_game_mod_form extends moodleform_mod {
         $mform->addElement('select', 'gameoption', get_string('game:option', 'game'), $game_options);
 
         $filemanager_options = array();
-        $filemanager_options['accepted_types'] = '*';
+        $filemanager_options['accepted_types'] = '.zip';
         $filemanager_options['maxbytes'] = 0;
-        $filemanager_options['maxfiles'] = -1;
+        $filemanager_options['maxfiles'] = 1;
         $filemanager_options['mainfile'] = true;
 
         $mform->addElement('filemanager', 'files', get_string('selectfiles'), null, $filemanager_options);
@@ -101,6 +101,12 @@ class mod_game_mod_form extends moodleform_mod {
         } else {
             $options = resourcelib_get_displayoptions(explode(',', $config->displayoptions));
         }
+
+        // getting rid of the display options other than 'open'
+        unset($options[0]);
+        unset($options[1]);
+        unset($options[4]);
+        unset($options[6]);
 
         if (count($options) == 1) {
             $mform->addElement('hidden', 'display');
