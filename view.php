@@ -90,7 +90,13 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 
 if ($redirect) {
     global $DB, $USER;
-    // TODO this should be a random temporary directory but it gets messed up because of the post request i'll fix it hopefully
+    // check if a games diretory exists if not create it
+    $games_dir = $CFG->dirroot.'/mod/game/games/';
+    if (!is_dir($games_dir)) {
+        mkdir($games_dir);       
+    }
+    // to prevent overloading duh
+    remove_directories_older_than_x_mins($games_dir, 5);
     $uniq = uniqid();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
     // Gets the newly exported scores on local and inserts them to the database

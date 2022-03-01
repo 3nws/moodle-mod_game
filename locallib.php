@@ -29,6 +29,34 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+// Removes a directory with the files it contains older than x minutes
+function remove_directories_older_than_x_mins($path, $x){
+    $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+    $files = new RecursiveIteratorIterator($it,
+                 RecursiveIteratorIterator::CHILD_FIRST);
+
+    foreach($files as $rs) {
+        if (time() - filemtime($rs) > (60*$x)){
+            if ($rs->isDir()){
+                rmdir($rs->getRealPath());
+            } else {
+                unlink($rs->getRealPath());
+            }
+        }
+    }
+    remove_empty_sub_folders($path);
+}
+
+// Removes emptry sub folders inside the $path directory
+function remove_empty_sub_folders($path){
+    $empty = true;
+    foreach (glob($path . DIRECTORY_SEPARATOR . "*") as $file) {
+        $empty &= is_dir($file) && remove_empty_sub_folders($file);
+    }
+    return $empty && (is_readable($path) && count(scandir($path)) == 2) && rmdir($path);
+}
+
+
 // Removes a directory with the files it contains
 function remove_directory($path){
     $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
