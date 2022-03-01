@@ -68,6 +68,13 @@ class mod_game_mod_form extends moodleform_mod {
             $mform->setType('topic', PARAM_CLEANHTML);
         }
         $mform->addRule('topic', null, 'required', null, 'client');
+        
+        $mform->addElement('text', 'threshold', get_string('threshold', 'game'), array('size'=>'10'));
+        if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('threshold', PARAM_TEXT);
+        } else {
+            $mform->setType('threshold', PARAM_CLEANHTML);
+        }
 
         $resolution_options = game_get_resolutions();
 

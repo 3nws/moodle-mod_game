@@ -102,7 +102,7 @@ if ($redirect) {
         if ($data){
             $data->course = $course->id;
             $data->name = $game->name." result";
-            $data->passornot = 1; // make dynamic
+            $data->passornot = ($data->score >= (int)$game->threshold) ? 1 : 0;
             $data->timemodified = time();
             $data->userid = $USER->id;
             $data->gameid = $game->id;

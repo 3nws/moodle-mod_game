@@ -49,7 +49,7 @@ function display_results($game){
     global $DB, $USER;
     
     // Selects results that match the current user and the game gets the highest scored entry
-    $sql_query =   "SELECT rs.id, rs.grade, rs.score 
+    $sql_query =   "SELECT rs.id, rs.grade, rs.score, rs.passornot
                     FROM {game_results} rs 
                     WHERE rs.userid = :user_id AND rs.gameid = :game_id
                     ORDER BY rs.score DESC
@@ -64,7 +64,8 @@ function display_results($game){
     $topic = $game->topic;
     $is_results_empty = !$results ? !empty($results) : true;
     $score = $is_results_empty ? array_values($results)[0]->score : 0;
-    $message = $score>=70 ? ", <div style='color:green;'> good job!</div>" : ", <div style='color:red;'> please revise the topic ".$topic."!</div>";
+    $hasPassed = $is_results_empty ? (int)array_values($results)[0]->passornot : 0;
+    $message = $hasPassed ? ", <div style='color:green;'> good job!</div>" : ", <div style='color:red;'> please revise the topic ".$topic."!</div>";
     $display_message = $is_results_empty ? "<strong>Your score is ". $score . $message."</strong>" : "<strong>You have no score!</strong>";
 
     return $display_message;
