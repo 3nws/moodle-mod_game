@@ -96,7 +96,7 @@ if ($redirect) {
         mkdir($games_dir);       
     }
     // to prevent overloading duh
-    remove_directories_older_than_x_mins($games_dir, 5);
+    remove_directories_older_than_x_mins($games_dir, 10);
     $uniq = uniqid();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
     // Gets the newly exported scores on local and inserts them to the database
