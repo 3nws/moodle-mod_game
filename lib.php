@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * List of features supported in Resource module
+ * List of features supported in Game module
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
@@ -498,16 +498,13 @@ function game_dndupload_handle($uploadinfo) {
     $data->files = $uploadinfo->draftitemid;
 
     // Set the display options to the site defaults.
-    $config = get_config('resource');
+    $config = get_config('game');
     $data->display = $config->display;
-    $data->popupheight = $config->popupheight;
-    $data->popupwidth = $config->popupwidth;
     $data->printintro = $config->printintro;
     $data->showresults = (isset($config->showresults)) ? $config->showresults : 0;
     $data->showsize = (isset($config->showsize)) ? $config->showsize : 0;
     $data->showtype = (isset($config->showtype)) ? $config->showtype : 0;
     $data->showdate = (isset($config->showdate)) ? $config->showdate : 0;
-    $data->filterfiles = $config->filterfiles;
 
     return game_add_instance($data, null);
 }

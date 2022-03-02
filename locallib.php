@@ -19,7 +19,6 @@
  * Private game module utility functions
  *
  * @package    mod_game
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -411,7 +410,7 @@ function game_print_heading($game, $cm, $course, $notused = false) {
 /**
  * Gets details of the file to cache in course cache to be displayed using {@link game_get_optional_details()}
  *
- * @param object $game Resource table row (only property 'displayoptions' is used here)
+ * @param object $game Game table row (only property 'displayoptions' is used here)
  * @param object $cm Course-module table row
  * @return string Size and type or empty string if show options are not enabled
  */
@@ -487,7 +486,7 @@ function game_get_file_details($game, $cm) {
  * Result may include the file size and type if those settings are chosen,
  * or blank if none.
  *
- * @param object $game Resource table row (only property 'displayoptions' is used here)
+ * @param object $game Game table row (only property 'displayoptions' is used here)
  * @param object $cm Course-module table row
  * @return string Size and type or empty string if show options are not enabled
  */

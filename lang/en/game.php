@@ -19,7 +19,6 @@
  * Strings for component 'game', language 'en', branch 'MOODLE_20_STABLE'
  *
  * @package    mod_game
- * @copyright  1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -44,12 +43,7 @@ $string['displayselect'] = 'Display';
 $string['displayselect_help'] = 'This setting, together with the file type and whether the browser allows embedding, determines how the file is displayed. Options may include:
 
 * Automatic - The best display option for the file type is selected automatically
-* Embed - The file is displayed within the page below the navigation bar together with the file description and any blocks
-* Force download - The user is prompted to download the file
-* Open - Only the file is displayed in the browser window
-* In pop-up - The file is displayed in a new browser window without menus or an address bar
-* In frame - The file is displayed within a frame below the navigation bar and file description
-* New window - The file is displayed in a new browser window with menus and an address bar';
+* Open - Only the file is displayed in the browser window';
 $string['displayselect_link'] = 'mod/file/mod';
 $string['displayselectexplain'] = 'Choose display type, unfortunately not all types are suitable for all files.';
 $string['duplicatewarning'] = 'You already have submitted a similar score.';
@@ -57,9 +51,7 @@ $string['dnduploadgame'] = 'Create file game';
 $string['encryptedcode'] = 'Encrypted code';
 $string['exportjson'] = 'It seems the game has not sent your results correctly. ';
 $string['filenotfound'] = 'File not found, sorry.';
-$string['filterfiles'] = 'Use filters on file content';
-$string['filterfilesexplain'] = 'Select type of file content filtering, please note this may cause problems for some Flash and Java applets. Please make sure that all text files are in UTF-8 encoding.';
-$string['filtername'] = 'Resource names auto-linking';
+$string['filtername'] = 'Game names auto-linking';
 $string['forcedownload'] = 'Force download';
 $string['framesize'] = 'Frame height';
 $string['indicator:cognitivedepth'] = 'File cognitive';
@@ -89,12 +81,6 @@ $string['optionsheader'] = 'Display options';
 $string['page-mod-game-x'] = 'Any file module page';
 $string['pluginadministration'] = 'File module administration';
 $string['pluginname'] = 'Game';
-$string['popupheight'] = 'Pop-up height (in pixels)';
-$string['popupheightexplain'] = 'Specifies default height of popup windows.';
-$string['popupgame'] = 'This game should appear in a popup window.';
-$string['popupgamelink'] = 'If it didn\'t, click here: {$a}';
-$string['popupwidth'] = 'Pop-up width (in pixels)';
-$string['popupwidthexplain'] = 'Specifies default width of popup windows.';
 $string['printintro'] = 'Display game description';
 $string['printintroexplain'] = 'Display game description below content? Some display types may not display description even if enabled.';
 $string['privacy:metadata'] = 'The File game plugin does not store any personal data.';

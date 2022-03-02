@@ -16,10 +16,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Resource configuration form
+ * Game configuration form
  *
  * @package    mod_game
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,7 +33,8 @@ class mod_game_mod_form extends moodleform_mod {
         global $CFG, $DB;
         $mform =& $this->_form;
 
-        $config = get_config('resource');
+        $config = get_config('game');
+        // die(var_dump($config));
 
         if ($this->current->instance and $this->current->tobemigrated) {
             // game not migrated yet
@@ -103,33 +103,14 @@ class mod_game_mod_form extends moodleform_mod {
         //-------------------------------------------------------
         $mform->addElement('header', 'optionssection', get_string('appearance'));
 
-        if ($this->current->instance) {
-            $options = resourcelib_get_displayoptions(explode(',', $config->displayoptions), $this->current->display);
-        } else {
-            $options = resourcelib_get_displayoptions(explode(',', $config->displayoptions));
-        }
 
-        // getting rid of the display options other than 'open'
-        unset($options[0]);
-        unset($options[1]);
-        unset($options[4]);
-        unset($options[6]);
-
-        if (count($options) == 1) {
-            $mform->addElement('hidden', 'display');
-            $mform->setType('display', PARAM_INT);
-            reset($options);
-            $mform->setDefault('display', key($options));
-        } else {
-            $mform->addElement('select', 'display', get_string('displayselect', 'game'), $options);
-            $mform->setDefault('display', $config->display);
-            $mform->addHelpButton('display', 'displayselect', 'game');
-        }
+        $mform->addElement('hidden', 'display');
+        $mform->setType('display', PARAM_INT);
+        $mform->setDefault('display', $config->display);
         
         $mform->addElement('checkbox', 'showresults', get_string('showresults', 'game'));
-        $mform->setDefault('showresults', 0); // set to zero as default TODO fix this somehow
+        $mform->setDefault('showresults', $config->showresults);
         $mform->addHelpButton('showresults', 'showresults', 'game');
-
         $mform->addElement('checkbox', 'showsize', get_string('showsize', 'game'));
         $mform->setDefault('showsize', $config->showsize);
         $mform->addHelpButton('showsize', 'showsize', 'game');
@@ -139,40 +120,6 @@ class mod_game_mod_form extends moodleform_mod {
         $mform->addElement('checkbox', 'showdate', get_string('showdate', 'game'));
         $mform->setDefault('showdate', $config->showdate);
         $mform->addHelpButton('showdate', 'showdate', 'game');
-
-        if (array_key_exists(RESOURCELIB_DISPLAY_POPUP, $options)) {
-            $mform->addElement('text', 'popupwidth', get_string('popupwidth', 'game'), array('size'=>3));
-            if (count($options) > 1) {
-                $mform->hideIf('popupwidth', 'display', 'noteq', RESOURCELIB_DISPLAY_POPUP);
-            }
-            $mform->setType('popupwidth', PARAM_INT);
-            $mform->setDefault('popupwidth', $config->popupwidth);
-            $mform->setAdvanced('popupwidth', true);
-
-            $mform->addElement('text', 'popupheight', get_string('popupheight', 'game'), array('size'=>3));
-            if (count($options) > 1) {
-                $mform->hideIf('popupheight', 'display', 'noteq', RESOURCELIB_DISPLAY_POPUP);
-            }
-            $mform->setType('popupheight', PARAM_INT);
-            $mform->setDefault('popupheight', $config->popupheight);
-            $mform->setAdvanced('popupheight', true);
-        }
-
-        if (array_key_exists(RESOURCELIB_DISPLAY_AUTO, $options) or
-          array_key_exists(RESOURCELIB_DISPLAY_EMBED, $options) or
-          array_key_exists(RESOURCELIB_DISPLAY_FRAME, $options)) {
-            $mform->addElement('checkbox', 'printintro', get_string('printintro', 'game'));
-            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_POPUP);
-            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_DOWNLOAD);
-            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_OPEN);
-            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_NEW);
-            $mform->setDefault('printintro', $config->printintro);
-        }
-
-        $options = array('0' => get_string('none'), '1' => get_string('allfiles'), '2' => get_string('htmlfilesonly'));
-        $mform->addElement('select', 'filterfiles', get_string('filterfiles', 'game'), $options);
-        $mform->setDefault('filterfiles', $config->filterfiles);
-        $mform->setAdvanced('filterfiles', true);
 
         //-------------------------------------------------------
         $this->standard_coursemodule_elements();
