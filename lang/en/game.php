@@ -67,6 +67,7 @@ $string['indicator:socialbreadthdef_link'] = 'Learning_analytics_indicators#Soci
 $string['legacyfiles'] = 'Migration of old course file';
 $string['legacyfilesactive'] = 'Active';
 $string['legacyfilesdone'] = 'Finished';
+$string['modemptydb'] = 'Empty results database';
 $string['modifieddate'] = 'Modified {$a}';
 $string['modulename'] = 'Game';
 $string['modulename_help'] = 'The file module enables a teacher to provide a file as a course game. Where possible, the file will be displayed within the course interface.

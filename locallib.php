@@ -28,6 +28,15 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+function clear_records(){
+
+    // will clear db here
+
+    redirect(new moodle_url('../../admin/settings.php', array(
+        'section' => 'modsettinggame',
+    )));
+}
+
 // Removes a directory with the files it contains older than x minutes
 function remove_directories_older_than_x_mins($path, $x){
     $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);

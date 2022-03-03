@@ -58,4 +58,8 @@ if ($ADMIN->fulltree) {
         get_string('showtype', 'game'), get_string('showtype_desc', 'game'), 0));
     $settings->add(new admin_setting_configcheckbox('game/showdate',
         get_string('showdate', 'game'), get_string('showdate_desc', 'game'), 0));
+    //--- Empty results db -----------------------------------------------------------------------------------
+    $warning = 'Please make sure you have no unsaved changes.';
+    $link = "<a href=".new moodle_url('/mod/game/clear.php')." class='btn btn-danger';>Empty all results</a> <strong style='color: red;'>".$warning."</strong>";
+    $settings->add(new admin_setting_heading('modemptydb', get_string('modemptydb', 'game'), $link));
 }
