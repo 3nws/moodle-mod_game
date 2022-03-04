@@ -29,8 +29,9 @@ require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
 function clear_records(){
+    global $DB;
 
-    // will clear db here
+    $DB->delete_records_select("game_results", 1);
 
     redirect(new moodle_url('../../admin/settings.php', array(
         'section' => 'modsettinggame',
