@@ -31,4 +31,10 @@ $PAGE->set_url(new moodle_url('/game/clear.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title(" ");
 
+require_login();
+
+if (!is_siteadmin()) {
+    die('Admin only');
+}
+
 clear_records();
