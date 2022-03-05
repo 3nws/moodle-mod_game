@@ -139,6 +139,15 @@ if ($redirect) {
     // Extract the stored_file instance into this destination if it doesn't already exist
     $files = !file_exists($dest.'/') ? $fp->extract_to_pathname($file, $dest) : null;
 
+    // Store the path of source file
+    $source = './htaccess_config/.htaccess';
+    // Create a file to overwrite
+    fopen($dest.'/Build/.htaccess', 'w'); 
+    // Store the path of destination file
+    $destination = $dest.'/Build/.htaccess';
+    // Copy the file
+    copy($source, $destination);
+
     $resolution_options = game_get_resolutions();
     
     $width_height = explode("x", $resolution_options[$game->resolution]);
