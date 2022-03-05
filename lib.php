@@ -97,6 +97,11 @@ function game_add_instance($data, $mform) {
     require_once("$CFG->dirroot/mod/game/locallib.php");
     $cmid = $data->coursemodule;
     $data->timemodified = time();
+    
+    // set default value here
+    if($data->threshold==""){
+        $data->threshold = 75;
+    }
 
     game_set_display_options($data);
 
