@@ -47,6 +47,7 @@ function remove_directories_older_than_x_mins($path, $x){
     foreach($files as $rs) {
         if (time() - filemtime($rs) > (60*$x)){
             if ($rs->isDir()){
+                // TODO: fix directory not empty err, what?
                 rmdir($rs->getRealPath());
             } else {
                 unlink($rs->getRealPath());
