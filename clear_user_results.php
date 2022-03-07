@@ -58,10 +58,11 @@ if (isset($_POST['userSearch'])){
 
     $user_id = array_values($results)[0]->id;
 
-    $sql_query = "SELECT g.name, rs.score, rs.grade 
+    $sql_query = "SELECT rs.id, g.name, rs.score, rs.grade
                   FROM {game_results} rs 
                   LEFT JOIN {game} g
-                  ON g.id = rs.gameid;";
+                  ON g.id = rs.gameid
+                  WHERE rs.userid = :user_id;";
 
     $params = [
         'user_id' => $user_id,
