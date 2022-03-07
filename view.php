@@ -99,7 +99,7 @@ if ($redirect) {
     $uniq = uniqid();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
     // Gets the newly exported scores on local and inserts them to the database
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['dest'])) {
         // $data = new stdClass();
         $old_dest = $_POST['dest'];
         $data = game_get_local_results($game, $old_dest);
