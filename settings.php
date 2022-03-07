@@ -60,6 +60,21 @@ if ($ADMIN->fulltree) {
         get_string('showdate', 'game'), get_string('showdate_desc', 'game'), 0));
     //--- Empty results db -----------------------------------------------------------------------------------
     $warning = 'Please make sure you have no unsaved changes.';
-    $link = "<a href=".new moodle_url('/mod/game/clear.php')." class='btn btn-danger';>Empty all results</a> <strong style='color: red;'>".$warning."</strong>";
+    $link = "</form><a href=".new moodle_url('/mod/game/clear.php')." class='btn btn-danger';>Empty all results</a> <strong style='color: red;'>".$warning."</strong>";
+
+    $clear_url = new moodle_url('/mod/game/clear_user_results.php');
+
+    $link .= "</br>
+    <form action='".$clear_url."' class='mt-3' method='POST'>
+        <div class='input-group rounded'>
+            <input type='text' class='form-control rounded' placeholder='Search a user' name='userSearch' aria-label='Search' aria-describedby='search-addon'/>
+            <button class='input-group-text border-0' type='submit'>
+                <i class='fa fa-search'></i>
+            </button>
+        </div>
+    </form>
+      ";
+
+    
     $settings->add(new admin_setting_heading('modemptydb', get_string('modemptydb', 'game'), $link));
 }
