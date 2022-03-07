@@ -28,6 +28,7 @@
         <caption>All scores of the user <span style="color: red">{{ username }}</span></caption>
         <thead>
           <tr>
+            <th scope="col">Game</th>
             <th scope="col">Score</th>
             <th scope="col">Grade</th>
             <th scope="col">Delete</th>
@@ -36,6 +37,7 @@
         <tbody>
           {{#results}}
           <tr>
+            <td>{{ name }}</td>
             <td>{{ score }}</td>
             <td>{{ grade }}</td>
             <td>

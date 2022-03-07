@@ -58,9 +58,10 @@ if (isset($_POST['userSearch'])){
 
     $user_id = array_values($results)[0]->id;
 
-    $sql_query =   "SELECT *
-                    FROM {game_results} 
-                    WHERE userid = :user_id;";
+    $sql_query = "SELECT g.name, rs.score, rs.grade 
+                  FROM {game_results} rs 
+                  LEFT JOIN {game} g
+                  ON g.id = rs.gameid;";
 
     $params = [
         'user_id' => $user_id,
@@ -72,15 +73,11 @@ if (isset($_POST['userSearch'])){
 
     $is_results_empty = !$results ? !empty($results) : true;
 
-    // TODO: add gametitle field in results table
-    // $games =
-
     $templatecontext = [
         'username' => $username,
         'results' => $is_results_empty ? $results : new stdClass(),
         'results_not_empty' => $is_results_empty,
         'formaction' => new moodle_url('/mod/game/clear_user_results.php'),
-        // 'games' => $games,
     ];
 
     $PAGE->set_title($username." Results");
