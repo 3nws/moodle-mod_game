@@ -28,7 +28,6 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
-
 // Clears the matching record in the results table
 function clear_records_by_user($resultid){
     global $DB;
@@ -56,8 +55,11 @@ function remove_directories_older_than_x_mins($path, $x){
     foreach($files as $rs) {
         if (time() - filemtime($rs) > (60*$x)){
             if ($rs->isDir()){
-                // TODO: fix directory not empty err, what?
-                rmdir($rs->getRealPath());
+                try{
+                    rmdir($rs->getRealPath());
+                }catch (Exception $e){
+                    ;
+                }
             } else {
                 unlink($rs->getRealPath());
             }
