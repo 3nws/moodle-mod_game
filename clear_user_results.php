@@ -41,6 +41,10 @@ if (isset($_POST['resultid'])){
     clear_records_by_user($_POST['resultid']);
 }
 
+if (isset($_POST['userid'])){
+    clear_all_records_by_user($_POST['userid']);
+}
+
 if (isset($_POST['userSearch'])){
     global $DB;
 
@@ -78,6 +82,7 @@ if (isset($_POST['userSearch'])){
         'username' => $username,
         'results' => $is_results_empty ? $results : new stdClass(),
         'results_not_empty' => $is_results_empty,
+        'userid' => $user_id,
         'formaction' => new moodle_url('/mod/game/clear_user_results.php'),
     ];
 

@@ -28,6 +28,13 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/game/lib.php");
 
+// Clears all the matching records in the results table
+function clear_all_records_by_user($userid){
+    global $DB;
+
+    $DB->delete_records_select("game_results", "userid = ".$userid);
+}
+
 // Clears the matching record in the results table
 function clear_records_by_user($resultid){
     global $DB;

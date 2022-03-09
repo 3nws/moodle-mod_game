@@ -24,6 +24,11 @@
 {{/results_not_empty}}
 
 {{#results_not_empty}}
+      <form action="{{ formaction }}" method='POST'>
+          <input type="hidden" name="userid" value="{{ userid }}">
+          <input type="hidden" name="userSearch" value="{{ username }}">
+          <button class="btn btn-danger">DELETE ALL</button>
+      </form>
       <table class="table table-sm table-hover">
         <caption>All scores of the user <span style="color: red">{{ username }}</span></caption>
         <thead>
