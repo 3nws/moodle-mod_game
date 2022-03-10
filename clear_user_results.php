@@ -45,50 +45,43 @@ if (isset($_POST['userid'])){
     clear_all_records_by_user($_POST['userid']);
 }
 
-if (isset($_POST['userSearch'])){
-    global $DB;
+global $DB;
 
-    $username = $_POST['userSearch'];
+$sql_query = "SELECT rs.id, g.name, rs.score, rs.grade, u.username
+              FROM {game_results} rs 
+              LEFT JOIN {game} g
+              ON g.id = rs.gameid
+              LEFT JOIN {user} u
+              ON u.id = rs.userid
+              WHERE 1;";
 
-    $sql_query = "SELECT id
-                  FROM {user}
-                  WHERE username = :username;";
-    
-    $params = [
-        'username' => $username,
-    ];
+$results = $DB->get_records_sql($sql_query);
+$results = array_values($results);
 
-    $results = $DB->get_records_sql($sql_query, $params);
+$is_results_empty = !$results ? !empty($results) : true;
 
-    $user_id = array_values($results)[0]->id;
+$sql_query = "SELECT username 
+              FROM {user}";
 
-    $sql_query = "SELECT rs.id, g.name, rs.score, rs.grade
-                  FROM {game_results} rs 
-                  LEFT JOIN {game} g
-                  ON g.id = rs.gameid
-                  WHERE rs.userid = :user_id;";
+$all_users = $DB->get_records_sql($sql_query);
+$all_users = array_values($all_users);
+$all_users_js_array = "[";
 
-    $params = [
-        'user_id' => $user_id,
-    ];
-
-    $results = $DB->get_records_sql($sql_query, $params);
-
-    $results = array_values($results);
-
-    $is_results_empty = !$results ? !empty($results) : true;
-
-    $templatecontext = [
-        'username' => $username,
-        'results' => $is_results_empty ? $results : new stdClass(),
-        'results_not_empty' => $is_results_empty,
-        'userid' => $user_id,
-        'formaction' => new moodle_url('/mod/game/clear_user_results.php'),
-    ];
-
-    $PAGE->set_title($username." Results");
-    echo $OUTPUT->header();
-    echo $OUTPUT->render_from_template('mod_game/user_results', $templatecontext);
-    echo $OUTPUT->footer();
-
+foreach ($all_users as $rs){
+    $all_users_js_array .= '"'.$rs->username.'"'.', ';
 }
+
+$all_users_js_array = substr($all_users_js_array, 0, -2);
+$all_users_js_array .= "]";
+
+$templatecontext = [
+    'results' => $is_results_empty ? $results : new stdClass(),
+    'results_not_empty' => $is_results_empty,
+    'formaction' => new moodle_url('/mod/game/clear_user_results.php'),
+    'all_users' => $all_users_js_array,
+];
+
+$PAGE->set_title("All Results");
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('mod_game/user_results', $templatecontext);
+echo $OUTPUT->footer();

@@ -65,16 +65,8 @@ if ($ADMIN->fulltree) {
     $clear_url = new moodle_url('/mod/game/clear_user_results.php');
 
     $link .= "</br>
-    <form action='".$clear_url."' class='mt-3' method='POST'>
-        <div class='input-group rounded'>
-            <input type='text' class='form-control rounded' placeholder='Search a user' name='userSearch' aria-label='Search' aria-describedby='search-addon'/>
-            <button class='input-group-text border-0' type='submit'>
-                <i class='fa fa-search'></i>
-            </button>
-        </div>
-    </form>
+    <a href=".$clear_url." class='btn btn-secondary mt-3';>View all results</a>
       ";
 
-    
     $settings->add(new admin_setting_heading('modemptydb', get_string('modemptydb', 'game'), $link));
 }

@@ -17,22 +17,35 @@
     {
     }
 }}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js">
+</script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
+</script>
 
 
+<div class="container">
 {{^results_not_empty}}
-  <h2><strong>NO RESULTS FOUND FOR THAT USER!</strong></h2>
+  <h2><strong>NO RESULTS IN THE DATABASE!</strong></h2>
 {{/results_not_empty}}
 
 {{#results_not_empty}}
       <form action="{{ formaction }}" method='POST'>
           <input type="hidden" name="userid" value="{{ userid }}">
           <input type="hidden" name="userSearch" value="{{ username }}">
-          <button class="btn btn-danger">DELETE ALL</button>
+          <button class="btn btn-danger mb-3">DELETE ALL</button>
       </form>
-      <table class="table table-sm table-hover">
-        <caption>All scores of the user <span style="color: red">{{ username }}</span></caption>
+      <table class="table table-sm table-hover" id='userResultsTable'>
         <thead>
           <tr>
+            <th scope="col">Username</th>
             <th scope="col">Game</th>
             <th scope="col">Score</th>
             <th scope="col">Grade</th>
@@ -42,6 +55,7 @@
         <tbody>
           {{#results}}
           <tr>
+            <td>{{ username }}</td>
             <td>{{ name }}</td>
             <td>{{ score }}</td>
             <td>{{ grade }}</td>
@@ -56,4 +70,17 @@
           {{/results}}
         </tbody>
       </table>
+      <script>
+        $('#userResultsTable').DataTable();
+      </script>
 {{/results_not_empty}}
+</div>
+
+<script>
+  $(function(){
+    var all_users = {{{ all_users }}};
+    $( "#all_users" ).autocomplete({
+      source: all_users
+    });
+  });
+</script>
