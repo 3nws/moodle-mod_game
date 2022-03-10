@@ -26,6 +26,19 @@
     <title>Unity WebGL Player | {{ name }}</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
+    </script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js">
+    </script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
+    </script>
   </head>
   <body>
     <div class="info">
@@ -49,12 +62,12 @@
     <div>
       <form action="{{ formaction }}" method="post">
         <input type="hidden" name="dest" value="{{ dest }}">
-        <button class="btn btn-primary mt-3">Submit your new score!</button>
+        <button class="btn btn-primary mt-3 mb-3">Submit your new score!</button>
       </form>
     </div>
     <div>
       {{#results_not_empty}}
-      <table class="table table-sm table-hover">
+      <table class="table table-sm table-hover" id='userResultsTable'>
         <caption>Your scores</caption>
         <thead>
           <tr>
@@ -72,6 +85,9 @@
         </tbody>
       </table>
       {{/results_not_empty}}
+      <script>
+        $('#userResultsTable').DataTable({searching: false});
+      </script>
     </div>
     <script>
       var container = document.querySelector("#unity-container");
