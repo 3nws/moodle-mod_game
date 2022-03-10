@@ -58,7 +58,6 @@ game_view($game, $course, $cm, $context);
 
 $PAGE->set_url('/mod/game/view.php', array('id' => $cm->id));
 
-
 if ($game->tobemigrated) {
     game_print_tobemigrated($game, $cm, $course);
     die;
@@ -95,7 +94,7 @@ if ($redirect) {
         mkdir($games_dir);       
     }
     // to prevent overloading duh
-    remove_directories_older_than_x_mins($games_dir, 10);
+    remove_directories_older_than_x_mins($games_dir, 30);
     $uniq = uniqid();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
     // Gets the newly exported scores on local and inserts them to the database
@@ -161,16 +160,12 @@ if ($redirect) {
     
     $highest_scored_record = new stdClass();
 
-    // highest_scored_record = $results[0];
-
     $templatecontext = [
         'name' => $game->name,
         'width' => $width_height[0],
         'height' => $width_height[1],
         'build_path' => "games/".$game->name.$uniq."/Build",
         'results' => $is_results_empty ? $results : new stdClass(),
-        // 'highest_grade' => $is_results_empty ? $highest_scored_record->grade : '',
-        // 'highest_score' => $is_results_empty ? $highest_scored_record->score : '',
         'results_not_empty' => $is_results_empty,
         'formaction' => $formaction,
         'dest' => $dest,
@@ -187,16 +182,3 @@ if ($redirect) {
     // $fullurl = moodle_url::make_file_url('/mod/game/games/',$file->get_filename().'_extracted/index.html');
     // redirect($fullurl);
 }
-
-// switch ($displaytype) {
-//     case RESOURCELIB_DISPLAY_EMBED:
-//         game_display_embed($game, $cm, $course, $file);
-//         break;
-//     case RESOURCELIB_DISPLAY_FRAME:
-//         game_display_frame($game, $cm, $course, $file);
-//         break;
-//     default:
-//         game_print_workaround($game, $cm, $course, $file);
-//         break;
-// }
-

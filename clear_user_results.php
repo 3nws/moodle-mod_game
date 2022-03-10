@@ -19,6 +19,7 @@
  * Version details
  *
  * @package    mod_game
+ * @author     Enes Kurbetoğlu
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +30,8 @@ global $DB;
 
 $PAGE->set_url(new moodle_url('/game/clear_user_results.php'));
 $PAGE->set_context(\context_system::instance());
-$PAGE->set_title(" ");
+$PAGE->set_title("All Results");
+$PAGE->set_heading("All Results");
 
 require_login();
 
@@ -81,7 +83,6 @@ $templatecontext = [
     'all_users' => $all_users_js_array,
 ];
 
-$PAGE->set_title("All Results");
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_game/user_results', $templatecontext);
 echo $OUTPUT->footer();

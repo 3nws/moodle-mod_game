@@ -17,7 +17,7 @@
     {
     }
 }}
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
 </script>
@@ -40,7 +40,7 @@
       <form action="{{ formaction }}" method='POST'>
           <input type="hidden" name="userid" value="{{ userid }}">
           <input type="hidden" name="userSearch" value="{{ username }}">
-          <button class="btn btn-danger mb-3">DELETE ALL</button>
+          <button class="btn btn-danger mb-3" aria-label='Delete all results'>DELETE ALL</button>
       </form>
       <table class="table table-sm table-hover" id='userResultsTable'>
         <thead>
@@ -63,7 +63,7 @@
                 <form action="{{ formaction }}" method='POST'>
                     <input type="hidden" name="resultid" value="{{ id }}">
                     <input type="hidden" name="userSearch" value="{{ username }}">
-                    <button class="btn btn-danger">DELETE</button>
+                    <button class="btn btn-danger" aria-label='Delete user result'><i class="fa fa-trash"></i></button>
                 </form>
             </td>
           </tr>

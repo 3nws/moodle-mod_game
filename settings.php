@@ -19,6 +19,7 @@
  * Game module admin settings and defaults
  *
  * @package    mod_game
+ * @author     Enes Kurbetoğlu
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,18 +29,10 @@ if ($ADMIN->fulltree) {
     require_once("$CFG->libdir/resourcelib.php");
 
     $displayoptions = resourcelib_get_displayoptions(array(RESOURCELIB_DISPLAY_AUTO,
-                                                        //    RESOURCELIB_DISPLAY_EMBED,
-                                                        //    RESOURCELIB_DISPLAY_FRAME,
-                                                        //    RESOURCELIB_DISPLAY_DOWNLOAD,
                                                            RESOURCELIB_DISPLAY_OPEN,
-                                                        //    RESOURCELIB_DISPLAY_NEW,
-                                                        //    RESOURCELIB_DISPLAY_POPUP,
                                                           ));
     $defaultdisplayoptions = array(RESOURCELIB_DISPLAY_AUTO,
-                                //    RESOURCELIB_DISPLAY_EMBED,
-                                //    RESOURCELIB_DISPLAY_DOWNLOAD,
                                    RESOURCELIB_DISPLAY_OPEN,
-                                //    RESOURCELIB_DISPLAY_POPUP,
                                   );
 
     //--- modedit defaults -----------------------------------------------------------------------------------
@@ -58,9 +51,10 @@ if ($ADMIN->fulltree) {
         get_string('showtype', 'game'), get_string('showtype_desc', 'game'), 0));
     $settings->add(new admin_setting_configcheckbox('game/showdate',
         get_string('showdate', 'game'), get_string('showdate_desc', 'game'), 0));
+        
     //--- Empty results db -----------------------------------------------------------------------------------
     $warning = 'Please make sure you have no unsaved changes.';
-    $link = "</form><a href=".new moodle_url('/mod/game/clear.php')." class='btn btn-danger';>Empty all results</a> <strong style='color: red;'>".$warning."</strong>";
+    $link = "</form><div class='container'><a href=".new moodle_url('/mod/game/clear.php')." class='btn btn-danger';>Delete all results</a> <strong style='color: #b50000;'>".$warning."</strong>";
 
     $clear_url = new moodle_url('/mod/game/clear_user_results.php');
 
@@ -68,5 +62,7 @@ if ($ADMIN->fulltree) {
     <a href=".$clear_url." class='btn btn-secondary mt-3';>View all results</a>
       ";
 
+
+    $link .= "</div>";
     $settings->add(new admin_setting_heading('modemptydb', get_string('modemptydb', 'game'), $link));
 }
