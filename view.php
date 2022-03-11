@@ -160,6 +160,10 @@ if ($redirect) {
     
     $highest_scored_record = new stdClass();
 
+    $game_filename = explode(".", $file->get_filename());
+    $game_filename = array_shift($game_filename);
+    $game_filename = implode("", array($game_filename));
+
     $templatecontext = [
         'name' => $game->name,
         'width' => $width_height[0],
@@ -169,6 +173,7 @@ if ($redirect) {
         'results_not_empty' => $is_results_empty,
         'formaction' => $formaction,
         'dest' => $dest,
+        'game_filename' => $game_filename,
     ];
 
     $PAGE->set_title($game->name);

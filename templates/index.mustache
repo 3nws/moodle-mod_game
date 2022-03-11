@@ -120,11 +120,11 @@
       }
 
       var buildUrl = "{{ build_path }}";
-      var loaderUrl = buildUrl + "/gamebuild.loader.js";
+      var loaderUrl = buildUrl + "/{{ game_filename }}.loader.js";
       var config = {
-        dataUrl: buildUrl + "/gamebuild.data.unityweb",
-        frameworkUrl: buildUrl + "/gamebuild.framework.js.unityweb",
-        codeUrl: buildUrl + "/gamebuild.wasm.unityweb",
+        dataUrl: buildUrl + "/{{ game_filename }}.data.unityweb",
+        frameworkUrl: buildUrl + "/{{ game_filename }}.framework.js.unityweb",
+        codeUrl: buildUrl + "/{{ game_filename }}.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "{{ name }}",
