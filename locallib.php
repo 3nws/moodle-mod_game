@@ -156,6 +156,16 @@ function game_get_local_results($game, $dest){
     }
 }
 
+// Return an array of compression method options for mod_game form
+function game_get_comp_methods(){
+    $comp_options = array();
+    $comp_options['0'] = "gzip";
+    $comp_options['1'] = "brotli";
+    $comp_options['2'] = "None";
+    
+    return $comp_options;
+}
+
 // Return an array of resolution options for mod_game form
 function game_get_resolutions(){
     $resolution_options = array();

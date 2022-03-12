@@ -139,7 +139,7 @@ if ($redirect) {
     $files = !file_exists($dest.'/') ? $fp->extract_to_pathname($file, $dest) : null;
 
     // Store the path of source file
-    $source = './htaccess_config/.htaccess';
+    $source = ($game->compmethod==0) ? './htaccess_config/gzip/.htaccess' : './htaccess_config/brotli/.htaccess';
     // Create a file to overwrite
     fopen($dest.'/Build/.htaccess', 'w'); 
     // Store the path of destination file
@@ -180,7 +180,11 @@ if ($redirect) {
     echo $OUTPUT->header();
     // download link for the game
     echo game_get_clicktodownload($file, $game->revision);
-    echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
+    if ($game->compmethod==2){
+        echo $OUTPUT->render_from_template('mod_game/index_no_comp', $templatecontext);
+    }else {
+        echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
+    }
     echo $OUTPUT->footer();
     
     // for downloading the file

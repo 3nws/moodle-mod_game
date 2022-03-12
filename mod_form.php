@@ -80,9 +80,13 @@ class mod_game_mod_form extends moodleform_mod {
 
         $game_options = game_get_games();
 
+        $comp_options = game_get_comp_methods();
+
         $mform->addElement('select', 'resolution', get_string('resolution', 'game'), $resolution_options);
 
         $mform->addElement('select', 'gameoption', get_string('game:option', 'game'), $game_options);
+        
+        $mform->addElement('select', 'compmethod', get_string('compmethod', 'game'), $comp_options);
 
         $filemanager_options = array();
         $filemanager_options['accepted_types'] = '.zip';

@@ -24,6 +24,7 @@
 
 $string['clicktodownload'] = 'Click {$a} link to download the file.';
 $string['clicktoopen2'] = 'Click {$a} link to view the file.';
+$string['compmethod'] = 'Compression method used for the game';
 $string['configdisplayoptions'] = 'Select all options that should be available, existing settings are not modified. Hold CTRL key to select multiple fields.';
 $string['configframesize'] = 'When a web page or an uploaded file is displayed within a frame, this value is the height (in pixels) of the top frame (which contains the navigation).';
 $string['configparametersettings'] = 'This sets the default value for the Parameter settings pane in the form when adding some new games. After the first time, this becomes an individual user preference.';
