@@ -139,7 +139,7 @@ if ($redirect) {
     $files = !file_exists($dest.'/') ? $fp->extract_to_pathname($file, $dest) : null;
 
     // Store the path of source file
-    $source = './htaccess_config/.htaccess';
+    $source = ($game->compmethod==0) ? './htaccess_config/gzip/.htaccess' : './htaccess_config/brotli/.htaccess';
     // Create a file to overwrite
     fopen($dest.'/Build/.htaccess', 'w'); 
     // Store the path of destination file
@@ -160,6 +160,10 @@ if ($redirect) {
     
     $highest_scored_record = new stdClass();
 
+    $game_filename = explode(".", $file->get_filename());
+    $game_filename = array_shift($game_filename);
+    $game_filename = implode("", array($game_filename));
+
     $templatecontext = [
         'name' => $game->name,
         'width' => $width_height[0],
@@ -169,13 +173,18 @@ if ($redirect) {
         'results_not_empty' => $is_results_empty,
         'formaction' => $formaction,
         'dest' => $dest,
+        'game_filename' => $game_filename,
     ];
 
     $PAGE->set_title($game->name);
     echo $OUTPUT->header();
     // download link for the game
     echo game_get_clicktodownload($file, $game->revision);
-    echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
+    if ($game->compmethod==2){
+        echo $OUTPUT->render_from_template('mod_game/index_no_comp', $templatecontext);
+    }else {
+        echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
+    }
     echo $OUTPUT->footer();
     
     // for downloading the file

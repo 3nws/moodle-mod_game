@@ -122,9 +122,9 @@
       var buildUrl = "{{ build_path }}";
       var loaderUrl = buildUrl + "/{{ game_filename }}.loader.js";
       var config = {
-        dataUrl: buildUrl + "/{{ game_filename }}.data.unityweb",
-        frameworkUrl: buildUrl + "/{{ game_filename }}.framework.js.unityweb",
-        codeUrl: buildUrl + "/{{ game_filename }}.wasm.unityweb",
+        dataUrl: buildUrl + "/{{ game_filename }}.data",
+        frameworkUrl: buildUrl + "/{{ game_filename }}.framework.js",
+        codeUrl: buildUrl + "/{{ game_filename }}.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "{{ name }}",
