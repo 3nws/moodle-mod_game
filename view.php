@@ -24,6 +24,7 @@
 
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/game/lib.php');
+require_once($CFG->dirroot.'/mod/game/classes/result.php');
 require_once($CFG->dirroot.'/mod/game/locallib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
@@ -97,38 +98,15 @@ if ($redirect) {
     remove_directories_older_than_x_mins($games_dir, 30);
     $uniq = uniqid();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
+    $results_manager = new results_manager();
     // Gets the newly exported scores on local and inserts them to the database
     if (isset($_POST['dest'])) {
         // $data = new stdClass();
         $old_dest = $_POST['dest'];
-        $data = game_get_local_results($game, $old_dest);
+        $data = $results_manager->game_get_local_results($game, $old_dest);
         // add to db here
         if ($data){
-            $data->course = $course->id;
-            $data->name = $game->name." result";
-            $data->passornot = ($data->score >= (int)$game->threshold) ? 1 : 0;
-            $data->timemodified = time();
-            $data->userid = $USER->id;
-            $data->gameid = $game->id;
-            $data->cmid = $cm->id;
-            $sql_query =   "SELECT rs.id, rs.grade, rs.score 
-                            FROM {game_results} rs 
-                            WHERE rs.userid = :user_id AND rs.score = :score
-                            ORDER BY rs.score DESC;";
-
-            $params = [
-                'user_id' => $USER->id,
-                'score' => $data->score,
-            ];
-        
-            $exact_matches = $DB->get_records_sql($sql_query, $params);
-            
-            if (!empty(array_values(($exact_matches)))){
-                \core\notification::add(get_string('duplicatewarning', 'game'), \core\output\notification::NOTIFY_WARNING);
-            }else{
-                // delete the results file to reset after inserting the scores to the db
-                $DB->insert_record('game_results', $data);
-            }
+            $is_result_created = $results_manager->create_result($data, $cm, $game, $course);
         }else{
             \core\notification::add(get_string('exportjson', 'game'), \core\output\notification::NOTIFY_WARNING);
         }
@@ -151,14 +129,14 @@ if ($redirect) {
     
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
-    $results = game_get_results($game);
+    $results = $results_manager->get_results($game);
     $results = array_values($results);
     
     $is_results_empty = !$results ? !empty($results) : true;
 
     $formaction = $PAGE->url;
     
-    $highest_scored_record = new stdClass();
+    // $highest_scored_record = new stdClass();
 
     $game_filename = explode(".", $file->get_filename());
     $game_filename = array_shift($game_filename);

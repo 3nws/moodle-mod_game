@@ -39,12 +39,14 @@ if (!is_siteadmin()) {
     die('Admin only');
 }
 
+$results_manager = new results_manager();
+
 if (isset($_POST['resultid'])){
-    clear_records_by_user($_POST['resultid']);
+    $results_manager->clear_records_by_user($_POST['resultid']);
 }
 
 if (isset($_POST['userid'])){
-    clear_all_records_by_user($_POST['userid']);
+    $results_manager->clear_all_records_by_user($_POST['userid']);
 }
 
 global $DB;

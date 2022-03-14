@@ -26,32 +26,10 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
+require_once($CFG->dirroot.'/mod/game/classes/result.php');
 require_once("$CFG->dirroot/mod/game/lib.php");
 
-// Clears all the matching records in the results table
-function clear_all_records_by_user($userid){
-    global $DB;
 
-    $DB->delete_records_select("game_results", "userid = ".$userid);
-}
-
-// Clears the matching record in the results table
-function clear_records_by_user($resultid){
-    global $DB;
-
-    $DB->delete_records_select("game_results", "id = ".$resultid);
-}
-
-// Clears all records in the results table
-function clear_records(){
-    global $DB;
-
-    $DB->delete_records_select("game_results", 1);
-
-    redirect(new moodle_url('../../admin/settings.php', array(
-        'section' => 'modsettinggame',
-    )));
-}
 
 // Removes a directory with the files it contains older than x minutes
 function remove_directories_older_than_x_mins($path, $x){
@@ -98,62 +76,6 @@ function remove_directory($path){
         }
     }
     rmdir($path);
-}
-
-// Return a string with the results processed
-function display_results($game){
-    global $DB, $USER;
-    
-    // Selects results that match the current user and the game gets the highest scored entry
-    $sql_query =   "SELECT rs.id, rs.grade, rs.score, rs.passornot
-                    FROM {game_results} rs 
-                    WHERE rs.userid = :user_id AND rs.gameid = :game_id
-                    ORDER BY rs.score DESC
-                    LIMIT 1;";
-
-    $params = [
-        'user_id' => $USER->id,
-        'game_id' => $game->id,
-    ];
-    
-    $results = $DB->get_records_sql($sql_query, $params);
-    $topic = $game->topic;
-    $is_results_empty = !$results ? !empty($results) : true;
-    $score = $is_results_empty ? array_values($results)[0]->score : 0;
-    $hasPassed = $is_results_empty ? (int)array_values($results)[0]->passornot : 0;
-    $message = $hasPassed ? ", <div style='color:green;'> good job!</div>" : ", <div style='color:red;'> please revise the topic ".$topic."!</div>";
-    $display_message = $is_results_empty ? "<strong>Your score is ". $score . $message."</strong>" : "<strong>You have no score!</strong>";
-
-    return $display_message;
-}
-
-// Return result entries from db
-function game_get_results($game){
-    global $DB, $USER;
-
-    // Selects results that match the current user and the game
-    $sql_query =   "SELECT rs.id, rs.grade, rs.score 
-                    FROM {game_results} rs 
-                    WHERE rs.userid = :user_id AND rs.gameid = :game_id
-                    ORDER BY rs.score DESC;";
-
-    $params = [
-        'user_id' => $USER->id,
-        'game_id' => $game->id,
-    ];
-    
-    $results = $DB->get_records_sql($sql_query, $params);
-    return $results;
-}
-
-// Return a json object consisting of game results
-function game_get_local_results($game, $dest){
-    $dest = $dest.'/results.json';
-    if ($flag = file_exists($dest)){
-        $data = file_get_contents($dest); 
-        $obj = json_decode($data); 
-        return $flag ? $obj[0] : false;
-    }
 }
 
 // Return an array of compression method options for mod_game form
@@ -429,8 +351,9 @@ function game_get_optional_details($game, $cm) {
         $date = '';
         $langstring = '';
         $infodisplayed = 0;
+        $results_manager = new results_manager();
         if (!empty($options['showresults'])) {
-            $results = display_results($game->game_obj);
+            $results = $results_manager->display_results($game->game_obj);
             $langstring .= 'results';
             $infodisplayed += 1;
         }
