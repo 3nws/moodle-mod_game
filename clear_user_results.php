@@ -34,10 +34,13 @@ $PAGE->set_title("All Results");
 $PAGE->set_heading("All Results");
 
 require_login();
+// require_admin();
 
-if (!is_siteadmin()) {
-    die('Admin only');
-}
+$context = context_system::instance();
+require_capability('mod/game:clearuserresults', $context);
+// if (!is_siteadmin()) {
+//     die('Admin only');
+// }
 
 $results_manager = new results_manager();
 
@@ -45,8 +48,8 @@ if (isset($_POST['resultid'])){
     $results_manager->clear_records_by_user($_POST['resultid']);
 }
 
-if (isset($_POST['userid'])){
-    $results_manager->clear_all_records_by_user($_POST['userid']);
+if (isset($_POST['clearall'])){
+    $results_manager->clear_records_no_redirect();
 }
 
 global $DB;

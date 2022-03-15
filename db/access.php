@@ -46,15 +46,26 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/course:manageactivities'
     ),
 
-/* TODO: review public portfolio API first!
-    'mod/game:portfolioexport' => array(
+    'mod/game:clearuserresults' => array(
+        'riskbitmask' => RISK_DATALOSS,
 
-        'captype' => 'read',
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM, //CONTEXT_COURSE for example only gives the capability to the enrolled users to the course with the roles below, I think.
+        'archetypes' => array(
+            'manager' => CAP_ALLOW,
+        ),
+        'clonepermissionsfrom' => 'moodle/course:manageactivities'
+    ),
+
+    'mod/game:addresultinstance' => array(
+        'riskbitmask' => RISK_XSS,
+
+        'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
-            'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
+            'student' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
         )
     ),
-*/
 );

@@ -33,9 +33,9 @@ $PAGE->set_context(\context_system::instance());
 $PAGE->set_title(" ");
 
 require_login();
+// require_admin();
 
-if (!is_siteadmin()) {
-    die('Admin only');
-}
+$context = context_system::instance();
+require_capability('mod/game:clearuserresults', $context);
 
 clear_records();

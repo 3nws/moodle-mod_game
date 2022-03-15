@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Resource external API
+ * Game external API
  *
  * @package    mod_game
  * @category   external

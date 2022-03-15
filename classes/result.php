@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Resource external API
+ * Game result API
  *
  * @package    mod_game
  * @category   result
@@ -24,12 +24,16 @@
  * @since      Moodle 3.0
  */
 
+
 class results_manager {
 
     // Create new result in DB
     public function create_result(stdClass $data, stdClass $cm, stdClass $game, stdClass $course) : bool
     {
         global $DB, $USER;
+        
+        require_capability('mod/game:addresultinstance', context_module::instance($cm->id));
+
         $data->course = $course->id;
         $data->name = $game->name." result";
         $data->passornot = ($data->score >= (int)$game->threshold) ? 1 : 0;
@@ -116,15 +120,19 @@ class results_manager {
     }
 
     // Clears all the matching records in the results table
-    public function clear_all_records_by_user($userid){
+    public function clear_records_no_redirect(){
         global $DB;
+        
+        require_capability('mod/game:clearuserresults', context_system::instance());
 
-        $DB->delete_records_select("game_results", "userid = ".$userid);
+        $DB->delete_records_select("game_results", 1);
     }
 
     // Clears the matching record in the results table
     public function clear_records_by_user($resultid){
         global $DB;
+
+        require_capability('mod/game:clearuserresults', context_system::instance());
 
         $DB->delete_records_select("game_results", "id = ".$resultid);
     }
@@ -132,6 +140,8 @@ class results_manager {
     // Clears all records in the results table
     public function clear_records(){
         global $DB;
+
+        require_capability('mod/game:clearuserresults', context_system::instance());
 
         $DB->delete_records_select("game_results", 1);
 
