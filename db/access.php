@@ -58,8 +58,6 @@ $capabilities = array(
     ),
 
     'mod/game:addresultinstance' => array(
-        'riskbitmask' => RISK_XSS,
-
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(

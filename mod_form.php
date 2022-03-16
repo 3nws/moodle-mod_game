@@ -26,12 +26,15 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/game/locallib.php');
+require_once($CFG->dirroot.'/mod/game/classes/game_mod_form.php');
 require_once($CFG->libdir.'/filelib.php');
 
 class mod_game_mod_form extends moodleform_mod {
     function definition() {
         global $CFG, $DB;
         $mform =& $this->_form;
+
+        $select_options_manager = new game_mod_form();
 
         $config = get_config('game');
         // die(var_dump($config));
@@ -76,11 +79,11 @@ class mod_game_mod_form extends moodleform_mod {
             $mform->setType('threshold', PARAM_CLEANHTML);
         }
 
-        $resolution_options = game_get_resolutions();
+        $resolution_options = $select_options_manager->get_resolutions();
 
-        $game_options = game_get_games();
+        $game_options = $select_options_manager->get_games();
 
-        $comp_options = game_get_comp_methods();
+        $comp_options = $select_options_manager->get_comp_methods();
 
         $mform->addElement('select', 'resolution', get_string('resolution', 'game'), $resolution_options);
 

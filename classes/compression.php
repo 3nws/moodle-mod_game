@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,26 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Game compression API
  *
  * @package    mod_game
+ * @category   compression
  * @author     Enes Kurbetoğlu
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @since      Moodle 3.0
  */
 
-require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot.'/mod/game/locallib.php');
+class compression_method {
 
-global $DB;
+    public $access_file;
 
-$PAGE->set_url(new moodle_url('/game/clear.php'));
-$PAGE->set_context(\context_system::instance());
-$PAGE->set_title(" ");
+    public function __construct($game_comp_method){
+        $this->access_file = ($game_comp_method==0) ? './htaccess_config/gzip/.htaccess' : './htaccess_config/brotli/.htaccess';
+    }
 
-require_login();
-// require_admin();
-
-$context = context_system::instance();
-require_capability('mod/game:clearuserresults', $context);
-
-clear_records(true);
+}

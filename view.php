@@ -25,6 +25,9 @@
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/game/lib.php');
 require_once($CFG->dirroot.'/mod/game/classes/result.php');
+require_once($CFG->dirroot.'/mod/game/classes/dirs.php');
+require_once($CFG->dirroot.'/mod/game/classes/game_mod_form.php');
+require_once($CFG->dirroot.'/mod/game/classes/compression.php');
 require_once($CFG->dirroot.'/mod/game/locallib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
@@ -89,16 +92,22 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 
 if ($redirect) {
     global $DB, $USER;
-    // check if a games diretory exists if not create it
+
+    $results_manager = new results_manager();
+    $directory_manager = new directory_manager();
+    $select_options_manager = new game_mod_form();
+
+    // check if a games diretory exists if not creates it
     $games_dir = $CFG->dirroot.'/mod/game/games/';
     if (!is_dir($games_dir)) {
         mkdir($games_dir);       
     }
     // to prevent overloading duh
-    remove_directories_older_than_x_mins($games_dir, 30);
+    $directory_manager->remove_directories_older_than_x_mins($games_dir, 30);
+
     $uniq = uniqid();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
-    $results_manager = new results_manager();
+
     // Gets the newly exported scores on local and inserts them to the database
     if (isset($_POST['dest'])) {
         // $data = new stdClass();
@@ -106,18 +115,25 @@ if ($redirect) {
         $data = $results_manager->game_get_local_results($game, $old_dest);
         // add to db here
         if ($data){
-            $is_result_created = $results_manager->create_result($data, $cm, $game, $course);
+            // creating new objects as to only use the fields we need in order to create a result, hopefully it'll be useful for unit tests
+            $cm_id = (object) ['id' => $cm->id];
+            $course_id = (object) ['id' => $course->id];
+            $game_name_id_threshold = (object) ['name' => $game->name, 'id' => $game->id, 'threshold' => $game->gamethreshold];
+            $is_result_created = $results_manager->create_result($data, $cm_id, $game_name_id_threshold, $course_id);
         }else{
+            // send a notification if the game hasn't exported the results or exported them incorrectly
             \core\notification::add(get_string('exportjson', 'game'), \core\output\notification::NOTIFY_WARNING);
         }
-        remove_directory($old_dest);
+        // removing the game directory now that we are done with it
+        $directory_manager->remove_directory($old_dest);
     }
+
     $fp = get_file_packer('application/zip');
     // Extract the stored_file instance into this destination if it doesn't already exist
     $files = !file_exists($dest.'/') ? $fp->extract_to_pathname($file, $dest) : null;
 
-    // Store the path of source file
-    $source = ($game->compmethod==0) ? './htaccess_config/gzip/.htaccess' : './htaccess_config/brotli/.htaccess';
+    // Store the path of source file, compression method class automatically determines the correct access file
+    $source = (new compression_method($game->compmethod))->access_file;
     // Create a file to overwrite
     fopen($dest.'/Build/.htaccess', 'w'); 
     // Store the path of destination file
@@ -125,19 +141,19 @@ if ($redirect) {
     // Copy the file
     copy($source, $destination);
 
-    $resolution_options = game_get_resolutions();
-    
+    // to set the unity view's resolution using the game resolution field
+    $resolution_options = $select_options_manager->get_resolutions();
     $width_height = explode("x", $resolution_options[$game->resolution]);
 
+    // fetching all the results of the user matching the game
     $results = $results_manager->get_results($game);
     $results = array_values($results);
-    
     $is_results_empty = !$results ? !empty($results) : true;
 
+    // to pass to the template so that we can use to send a post request to submit the result
     $formaction = $PAGE->url;
-    
-    // $highest_scored_record = new stdClass();
 
+    // workaround for game filenames with multiple dots
     $game_filename = explode(".", $file->get_filename());
     $game_filename = array_shift($game_filename);
     $game_filename = implode("", array($game_filename));
@@ -164,8 +180,4 @@ if ($redirect) {
         echo $OUTPUT->render_from_template('mod_game/index', $templatecontext);
     }
     echo $OUTPUT->footer();
-    
-    // for downloading the file
-    // $fullurl = moodle_url::make_file_url('/mod/game/games/',$file->get_filename().'_extracted/index.html');
-    // redirect($fullurl);
 }

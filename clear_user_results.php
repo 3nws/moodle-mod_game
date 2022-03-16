@@ -49,7 +49,7 @@ if (isset($_POST['resultid'])){
 }
 
 if (isset($_POST['clearall'])){
-    $results_manager->clear_records_no_redirect();
+    $results_manager->clear_records(false);
 }
 
 global $DB;
