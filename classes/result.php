@@ -25,7 +25,6 @@
  */
 
 
-
 class results_manager {
 
     // Create new result in DB
@@ -37,7 +36,7 @@ class results_manager {
 
         $data->course = $course->id;
         $data->name = $game->name." result";
-        $data->passornot = ($data->score >= (int)$game->threshold) ? 1 : 0;
+        $data->passornot = ($data->score >= $game->threshold) ? 1 : 0;
         $data->timemodified = time();
         $data->userid = $USER->id;
         $data->gameid = $game->id;
@@ -59,8 +58,8 @@ class results_manager {
             return false;
         }else{
             // delete the results file to reset after inserting the scores to the db
-            $DB->insert_record('game_results', $data);
-            return true;
+            $record = $DB->insert_record('game_results', $data, false);
+            return $record;
         }
     }
 
@@ -81,6 +80,27 @@ class results_manager {
 
         $results = $DB->get_records_sql($sql_query, $params);
         return $results;
+    }
+
+    // Updates all the results' passornot
+    public function update_results(){
+        global $DB, $USER;
+        
+        $sql_query =   "UPDATE {game_results} rs 
+                        LEFT OUTER JOIN {game} g
+                        ON rs.gameid=g.id  
+                        SET rs.passornot=0  
+                        WHERE g.threshold>rs.score";
+        
+        $DB->execute($sql_query);
+
+        $sql_query =   "UPDATE {game_results} rs 
+                        LEFT OUTER JOIN {game} g
+                        ON rs.gameid=g.id  
+                        SET rs.passornot=1  
+                        WHERE g.threshold<=rs.score";
+        
+        $DB->execute($sql_query);
     }
 
     // Return a string with the results processed

@@ -17,7 +17,7 @@
 /**
  * Data generator.
  *
- * @package    mod_resource
+ * @package    mod_game
  * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,14 +28,14 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Resource module data generator class.
  *
- * @package    mod_resource
+ * @package    mod_game
  * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_resource_generator extends testing_module_generator {
+class mod_game_generator extends testing_module_generator {
 
     /**
-     * Creates new resource module instance. By default it contains a short
+     * Creates new game module instance. By default it contains a short
      * text file.
      *
      * @param array|stdClass $record data for module being generated. Requires 'course' key
@@ -53,7 +53,7 @@ class mod_resource_generator extends testing_module_generator {
 
         // Fill in optional values if not specified.
         if (!isset($record->display)) {
-            $record->display = RESOURCELIB_DISPLAY_AUTO;
+            $record->display = 0;
         }
         if (!isset($record->printintro)) {
             $record->printintro = 0;
@@ -67,12 +67,24 @@ class mod_resource_generator extends testing_module_generator {
         if (!isset($record->showtype)) {
             $record->showtype = 0;
         }
+        if (!isset($record->gameoption)) {
+            $record->gameoption = 0;
+        }
+        if (!isset($record->resolution)) {
+            $record->resolution = 2;
+        }
+        if (!isset($record->compmethod)) {
+            $record->compmethod = 0;
+        }
+        if (!isset($record->topic)) {
+            $record->topic = "Test topic";
+        }
 
         // The 'files' value corresponds to the draft file area ID. If not
         // specified, create a default file.
         if (!isset($record->files)) {
             if (empty($USER->username) || $USER->username === 'guest') {
-                throw new coding_exception('resource generator requires a current user');
+                throw new coding_exception('game generator requires a current user');
             }
             $usercontext = context_user::instance($USER->id);
 
@@ -82,9 +94,9 @@ class mod_resource_generator extends testing_module_generator {
             // Add actual file there.
             $filerecord = array('component' => 'user', 'filearea' => 'draft',
                     'contextid' => $usercontext->id, 'itemid' => $record->files,
-                    'filename' => 'resource' . ($this->instancecount+1) . '.txt', 'filepath' => '/');
+                    'filename' => 'game' . ($this->instancecount+1) . '.txt', 'filepath' => '/');
             $fs = get_file_storage();
-            $fs->create_file_from_string($filerecord, 'Test resource ' . ($this->instancecount+1) . ' file');
+            $fs->create_file_from_string($filerecord, 'Test game ' . ($this->instancecount+1) . ' file');
         }
 
         // Do work to actually add the instance.
