@@ -15,14 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Game module version information
+ * Game event handler definition.
  *
- * @package    mod_game
+ * @package mod_game
+ * @category event
+ * @author Enes Kurbetoğlu
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+// List of observers.
+$observers = array(
 
-$plugin->version   = 2022031805;       // The current module version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021051100;    // Requires this Moodle version.
-$plugin->component = 'mod_game'; // Full name of the plugin (used for diagnostics)
-$plugin->cron      = 0;
+    array(
+        'eventname'   => '\core\event\course_module_deleted',
+        'callback'    => 'mod_game_observer::course_module_deleted',
+    ),
+    
+);

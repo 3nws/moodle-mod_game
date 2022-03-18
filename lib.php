@@ -141,6 +141,29 @@ function game_update_instance($data, $mform) {
 }
 
 /**
+ * Delete game instance.
+ * @param int $id
+ * @return bool true
+ */
+function game_delete_instance($id) {
+    global $DB;
+    
+    if (!$game = $DB->get_record('game', array('id'=>$id))) {
+        return false;
+    }
+
+    $cm = get_coursemodule_from_instance('game', $id);
+    \core_completion\api::update_completion_date_event($cm->id, 'game', $id, null);
+
+    // note: all context files are deleted automatically
+
+    
+    $DB->delete_records('game', array('id'=>$game->id));
+
+    return true;
+}
+
+/**
  * Updates display options based on form input.
  *
  * Shared code used by game_add_instance and game_update_instance.
@@ -169,28 +192,6 @@ function game_set_display_options($data) {
         $displayoptions['showdate'] = 1;
     }
     $data->displayoptions = serialize($displayoptions);
-}
-
-/**
- * Delete game instance.
- * @param int $id
- * @return bool true
- */
-function game_delete_instance($id) {
-    global $DB;
-
-    if (!$game = $DB->get_record('game', array('id'=>$id))) {
-        return false;
-    }
-
-    $cm = get_coursemodule_from_instance('game', $id);
-    \core_completion\api::update_completion_date_event($cm->id, 'game', $id, null);
-
-    // note: all context files are deleted automatically
-
-    $DB->delete_records('game', array('id'=>$game->id));
-
-    return true;
 }
 
 /**
