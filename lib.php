@@ -23,6 +23,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->dirroot.'/mod/game/classes/result.php');
+
 /**
  * List of features supported in Game module
  * @param string $feature FEATURE_xx constant for requested feature
@@ -97,11 +99,6 @@ function game_add_instance($data, $mform) {
     require_once("$CFG->dirroot/mod/game/locallib.php");
     $cmid = $data->coursemodule;
     $data->timemodified = time();
-    
-    // set default value here
-    if($data->threshold==""){
-        $data->threshold = 75;
-    }
 
     game_set_display_options($data);
 
@@ -125,6 +122,7 @@ function game_add_instance($data, $mform) {
  */
 function game_update_instance($data, $mform) {
     global $CFG, $DB;
+    $results_manager = new results_manager();
     require_once("$CFG->libdir/resourcelib.php");
     $data->timemodified = time();
     $data->id           = $data->instance;
@@ -138,6 +136,7 @@ function game_update_instance($data, $mform) {
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
     \core_completion\api::update_completion_date_event($data->coursemodule, 'game', $data->id, $completiontimeexpected);
 
+    $results_manager->update_results();
     return true;
 }
 

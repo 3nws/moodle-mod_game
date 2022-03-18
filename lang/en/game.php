@@ -122,6 +122,6 @@ If there are multiple files in this game, the start file type is displayed.
 
 If the file type is not known to the system, it will not display.';
 
-$string['threshold'] = 'The threshold to get a passing grade (75 by default)';
+$string['threshold'] = 'The threshold to get a passing grade';
 
 $string['uploadeddate'] = 'Uploaded {$a}';
