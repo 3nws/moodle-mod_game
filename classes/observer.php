@@ -15,14 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Game module version information
+ * Event observers supported by this module
  *
- * @package    mod_game
+ * @package mod_game
+ * @author Enes Kurbetoğlu
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022031805;       // The current module version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021051100;    // Requires this Moodle version.
-$plugin->component = 'mod_game'; // Full name of the plugin (used for diagnostics)
-$plugin->cron      = 0;
+
+class mod_game_observer {
+
+    /**
+     * Observer for the even course_module_deleted.
+     *
+     * @param \core\event\course_module_deleted $event
+     */
+    public static function course_module_deleted(\core\event\course_module_deleted $event) {
+        global $DB;
+
+        // delete the game and the associated results
+        if ($event->other['modulename']=='game') {
+            $DB->delete_records_select("game_results", "cmid = ".$event->objectid);
+            $DB->delete_records_select("game", "id = ".$event->other['instanceid']);
+        }
+    }
+    
+}

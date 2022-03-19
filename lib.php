@@ -100,6 +100,10 @@ function game_add_instance($data, $mform) {
     $cmid = $data->coursemodule;
     $data->timemodified = time();
 
+    if ($data->threshold>100){
+        $data->threshold = 100;
+    }
+
     game_set_display_options($data);
 
     $data->id = $DB->insert_record('game', $data);
@@ -128,6 +132,10 @@ function game_update_instance($data, $mform) {
     $data->id           = $data->instance;
     $data->revision++;
 
+    if ($data->threshold>100){
+        $data->threshold = 100;
+    }
+
     game_set_display_options($data);
 
     $DB->update_record('game', $data);
@@ -137,6 +145,29 @@ function game_update_instance($data, $mform) {
     \core_completion\api::update_completion_date_event($data->coursemodule, 'game', $data->id, $completiontimeexpected);
 
     $results_manager->update_results();
+    return true;
+}
+
+/**
+ * Delete game instance.
+ * @param int $id
+ * @return bool true
+ */
+function game_delete_instance($id) {
+    global $DB;
+    
+    if (!$game = $DB->get_record('game', array('id'=>$id))) {
+        return false;
+    }
+
+    $cm = get_coursemodule_from_instance('game', $id);
+    \core_completion\api::update_completion_date_event($cm->id, 'game', $id, null);
+
+    // note: all context files are deleted automatically
+
+    
+    $DB->delete_records('game', array('id'=>$game->id));
+
     return true;
 }
 
@@ -169,28 +200,6 @@ function game_set_display_options($data) {
         $displayoptions['showdate'] = 1;
     }
     $data->displayoptions = serialize($displayoptions);
-}
-
-/**
- * Delete game instance.
- * @param int $id
- * @return bool true
- */
-function game_delete_instance($id) {
-    global $DB;
-
-    if (!$game = $DB->get_record('game', array('id'=>$id))) {
-        return false;
-    }
-
-    $cm = get_coursemodule_from_instance('game', $id);
-    \core_completion\api::update_completion_date_event($cm->id, 'game', $id, null);
-
-    // note: all context files are deleted automatically
-
-    $DB->delete_records('game', array('id'=>$game->id));
-
-    return true;
 }
 
 /**
