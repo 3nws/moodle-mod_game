@@ -50,7 +50,7 @@ class mod_game_results_manager_test extends advanced_testcase {
 
         $data = new stdClass();
         $data->score = 74;
-        $data->grade = "D";
+        $data->grade = "B";
 
         $game_name_id_threshold = (object) ['name' => "Test game", 'id' => 1, 'threshold' => $threshold];
 
@@ -71,7 +71,73 @@ class mod_game_results_manager_test extends advanced_testcase {
         $first_result = array_pop($results);
 
         $this->assertEquals(74 , $first_result->score);
-        $this->assertEquals("D" , $first_result->grade);
+        $this->assertEquals("B" , $first_result->grade);
+    }
+
+    public function test_clear_records_by_user(){
+        $this->resetAfterTest();
+        $this->setUser(2);
+        
+        $threshold = 51;
+
+        $dg = $this->getDataGenerator();
+        
+        $c1 = $dg->create_course();
+        $game1 = $dg->create_module('game', ['course' => $c1->id]);
+        $context = context_module::instance($game1->cmid);
+        $cm = get_coursemodule_from_instance('game', $game1->id);
+    
+        $manager = new results_manager();
+
+        $data = new stdClass();
+        $data->score = 74;
+        $data->grade = "B";
+
+        $game_name_id_threshold = (object) ['name' => "Test game", 'id' => 1, 'threshold' => $threshold];
+
+        $is_created = $manager->create_result($data, $cm, $game_name_id_threshold, $c1);
+
+        $this->assertTrue($is_created);
+
+        $results = $manager->get_results($game_name_id_threshold);
+
+        $this->assertNotEmpty($results);
+
+        $this->assertCount(1, $results);
+
+        $first_result = array_pop($results);
+
+        $result = $manager->clear_records_by_user($first_result->id);
+
+        $this->assertTrue($result);
+    }
+
+    public function test_clear_records(){
+        $this->resetAfterTest();
+        $this->setUser(2);
+        
+        $threshold = 51;
+
+        $dg = $this->getDataGenerator();
+        
+        $c1 = $dg->create_course();
+        $game1 = $dg->create_module('game', ['course' => $c1->id]);
+        $context = context_module::instance($game1->cmid);
+        $cm = get_coursemodule_from_instance('game', $game1->id);
+    
+        $manager = new results_manager();
+
+        $data = new stdClass();
+        $data->score = 74;
+        $data->grade = "B";
+
+        $game_name_id_threshold = (object) ['name' => "Test game", 'id' => 1, 'threshold' => $threshold];
+
+        $manager->create_result($data, $cm, $game_name_id_threshold, $c1);
+
+        $is_cleared = $manager->clear_records(false);
+        
+        $this->assertTrue($is_cleared);
     }
 
 }

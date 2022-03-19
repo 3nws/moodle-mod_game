@@ -142,27 +142,29 @@ class results_manager {
     }
 
     // Clears the matching record in the results table
-    public function clear_records_by_user($resultid){
+    public function clear_records_by_user($resultid) : bool
+    {
         global $DB;
 
         require_capability('mod/game:clearuserresults', context_system::instance());
 
-        $DB->delete_records_select("game_results", "id = ".$resultid);
+        return $DB->delete_records_select("game_results", "id = ".$resultid);
     }
 
     // Clears all records in the results table and redirect to the admin page if set
-    public function clear_records($redirect){
+    public function clear_records($redirect) {
         global $DB;
 
         require_capability('mod/game:clearuserresults', context_system::instance());
 
-        $DB->delete_records_select("game_results", 1);
+        $is_cleared = $DB->delete_records_select("game_results", 1);
 
         if ($redirect){
             redirect(new moodle_url('../../admin/settings.php', array(
                 'section' => 'modsettinggame',
             )));
         }
+        return $is_cleared;
     }
 
 }

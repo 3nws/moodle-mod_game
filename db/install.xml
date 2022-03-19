@@ -18,7 +18,7 @@
         <FIELD NAME="display" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="displayoptions" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="filterfiles" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="gameoption" TYPE="text" LENGTH="20" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="gameoption" TYPE="text" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="topic" TYPE="text" LENGTH="20" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="threshold" TYPE="int" LENGTH="10" DEFAULT="75" SEQUENCE="false"/>
         <FIELD NAME="resolution" TYPE="text" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
