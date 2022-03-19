@@ -38,4 +38,6 @@ require_login();
 $context = context_system::instance();
 require_capability('mod/game:clearuserresults', $context);
 
-clear_records(true);
+$results_manager = new results_manager();
+
+$results_manager->clear_records(true);
