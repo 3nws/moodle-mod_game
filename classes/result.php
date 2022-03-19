@@ -59,6 +59,7 @@ class results_manager {
         }else{
             // delete the results file to reset after inserting the scores to the db
             $record = $DB->insert_record('game_results', $data, false);
+            $this->update_results();
             return $record;
         }
     }
