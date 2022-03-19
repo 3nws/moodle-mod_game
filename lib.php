@@ -100,6 +100,10 @@ function game_add_instance($data, $mform) {
     $cmid = $data->coursemodule;
     $data->timemodified = time();
 
+    if ($data->threshold>100){
+        $data->threshold = 100;
+    }
+
     game_set_display_options($data);
 
     $data->id = $DB->insert_record('game', $data);
@@ -127,6 +131,10 @@ function game_update_instance($data, $mform) {
     $data->timemodified = time();
     $data->id           = $data->instance;
     $data->revision++;
+
+    if ($data->threshold>100){
+        $data->threshold = 100;
+    }
 
     game_set_display_options($data);
 

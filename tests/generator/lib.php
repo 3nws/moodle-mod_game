@@ -51,6 +51,9 @@ class mod_game_generator extends testing_module_generator {
         // Ensure the record can be modified without affecting calling code.
         $record = (object)(array)$record;
 
+        if (!isset($record->threshold)) {
+            $record->threshold = 75;
+        }
         // Fill in optional values if not specified.
         if (!isset($record->display)) {
             $record->display = 0;

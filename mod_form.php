@@ -76,7 +76,8 @@ class mod_game_mod_form extends moodleform_mod {
         
         $mform->setType('threshold', PARAM_INT);
         $mform->addRule('threshold', null, 'required', null, 'client');
-
+        $mform->setDefault('threshold', 75);
+        
         $resolution_options = $select_options_manager->get_resolutions();
 
         $game_options = $select_options_manager->get_games();

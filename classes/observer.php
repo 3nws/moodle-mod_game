@@ -34,10 +34,12 @@ class mod_game_observer {
      */
     public static function course_module_deleted(\core\event\course_module_deleted $event) {
         global $DB;
-        // die(var_dump($event));
 
         // delete the game and the associated results
-        $DB->delete_records_select("game_results", "cmid = ".$event->objectid);
-        $DB->delete_records_select("game", "id = ".$event->other['instanceid']);
+        if ($event->other['modulename']=='game') {
+            $DB->delete_records_select("game_results", "cmid = ".$event->objectid);
+            $DB->delete_records_select("game", "id = ".$event->other['instanceid']);
+        }
     }
+    
 }
