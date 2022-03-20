@@ -28,7 +28,7 @@ $tasks = [
     [
         'classname' => 'mod_game\task\remove_old_dirs',
         'blocking' => 0,
-        'minute' => '*',
+        'minute' => '30',
         'hour' => '*',
         'day' => '*',
         'dayofweek' => '*',

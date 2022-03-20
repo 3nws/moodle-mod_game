@@ -22,7 +22,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022032001;       // The current module version (Date: YYYYMMDDXX).
+$plugin->version   = 2022032004;       // The current module version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021051100;    // Requires this Moodle version.
 $plugin->component = 'mod_game'; // Full name of the plugin (used for diagnostics)
-$plugin->cron      = 0;
+$plugin->cron      = 60;

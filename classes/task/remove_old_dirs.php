@@ -40,7 +40,7 @@ class remove_old_dirs extends \core\task\scheduled_task {
     public function execute() {
         global $CFG;
         $games_dir = $CFG->dirroot.'/mod/game/games/';
-        $manager = new directory_manager();
+        $manager = new \directory_manager(); // apparently that backwards slash is pretty important!!
         $manager->remove_directories_older_than_x_mins($games_dir, 30);
     }
 }
