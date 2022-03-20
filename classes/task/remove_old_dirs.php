@@ -15,14 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Game module version information
+ * Legacy Cron Quiz Reports Task
  *
  * @package    mod_game
+ * @author     Enes Kurbetoğlu
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
  */
+namespace mod_game\task;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022032001;       // The current module version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021051100;    // Requires this Moodle version.
-$plugin->component = 'mod_game'; // Full name of the plugin (used for diagnostics)
-$plugin->cron      = 0;
+require_once($CFG->dirroot.'/mod/game/classes/dirs.php');
+
+class remove_old_dirs extends \core\task\scheduled_task {
+
+    public function get_name() {
+        return get_string('removeolddirs', 'mod_game');
+    }
+
+    /**
+     * Execute all game tasks.
+     */
+    public function execute() {
+        global $CFG;
+        $games_dir = $CFG->dirroot.'/mod/game/games/';
+        $manager = new directory_manager();
+        $manager->remove_directories_older_than_x_mins($games_dir, 30);
+    }
+}

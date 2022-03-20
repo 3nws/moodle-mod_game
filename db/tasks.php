@@ -15,14 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Game module version information
+ * Definition of Quiz scheduled tasks.
  *
- * @package    mod_game
+ * @package   mod_game
+ * @category  task
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022032001;       // The current module version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021051100;    // Requires this Moodle version.
-$plugin->component = 'mod_game'; // Full name of the plugin (used for diagnostics)
-$plugin->cron      = 0;
+$tasks = [
+    [
+        'classname' => 'mod_game\task\remove_old_dirs',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '*',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ],
+];

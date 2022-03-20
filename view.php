@@ -102,8 +102,6 @@ if ($redirect) {
     if (!is_dir($games_dir)) {
         mkdir($games_dir);       
     }
-    // to prevent overloading duh
-    $directory_manager->remove_directories_older_than_x_mins($games_dir, 30);
 
     $uniq = uniqid();
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
