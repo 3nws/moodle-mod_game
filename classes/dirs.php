@@ -36,11 +36,7 @@ class directory_manager {
         foreach($files as $rs) {
             if (time() - filemtime($rs) > (60*$x)){
                 if ($rs->isDir()){
-                    try{
-                        rmdir($rs->getRealPath());
-                    }catch (Exception $e){
-                        ;
-                    }
+                    $this->remove_dir_contents($rs->getRealPath());
                 } else {
                     unlink($rs->getRealPath());
                 }
@@ -49,23 +45,32 @@ class directory_manager {
         $this->remove_empty_sub_folders($path);
     }
 
-    // Removes a directory with the files it contains
-    public function remove_directory($path){
-        $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new RecursiveIteratorIterator($it,
-                    RecursiveIteratorIterator::CHILD_FIRST);
-        foreach($files as $rs) {
-            if ($rs->isDir()){
-                rmdir($rs->getRealPath());
+    
+
+    // Removes a directory's contents
+    public function remove_dir_contents($path){
+        if (!is_dir($path)) {
+            throw new InvalidArgumentException("$path must be a directory");
+        }
+        if (substr($path, strlen($path) - 1, 1) != '/') {
+            $path .= '/';
+        }
+        $files = scandir($path); 
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') continue;
+            if (is_dir($path.$file)) {
+                $this->remove_dir_contents($path.$file);
             } else {
-                unlink($rs->getRealPath());
+                if ($path.$file !== __FILE__) {
+                    unlink($path.$file);
+                }
             }
         }
         rmdir($path);
     }
 
     
-    // Removes emptry sub folders inside the $path directory
+    // Removes empty sub folders inside the $path directory
     public function remove_empty_sub_folders($path){
         $empty = true;
         foreach (glob($path . DIRECTORY_SEPARATOR . "*") as $file) {
@@ -73,4 +78,5 @@ class directory_manager {
         }
         return $empty && (is_readable($path) && count(scandir($path)) == 2) && rmdir($path);
     }
+
 }

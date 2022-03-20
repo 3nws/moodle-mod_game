@@ -31,7 +31,7 @@ require_once($CFG->dirroot.'/course/modlib.php');
 
 class compression_method_test extends advanced_testcase {
 
-    public function test_create_result(){
+    public function test_get_comp_method(){
         $this->resetAfterTest();
         $this->setUser(2);
 
