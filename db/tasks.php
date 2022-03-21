@@ -28,8 +28,18 @@ $tasks = [
     [
         'classname' => 'mod_game\task\remove_old_dirs',
         'blocking' => 0,
-        'minute' => '30',
+        'minute' => '*',
         'hour' => '*',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ],
+
+    [
+        'classname' => 'mod_game\task\remove_empty_dirs',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '*/12',
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*'

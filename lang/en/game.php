@@ -88,6 +88,7 @@ $string['printintroexplain'] = 'Display game description below content? Some dis
 $string['privacy:metadata'] = 'The File game plugin does not store any personal data.';
 $string['relatedtopic'] = 'The topic the game is related to';
 $string['removeolddirs'] = 'Remove old directories';
+$string['removeemptydirs'] = 'Remove empty directories';
 $string['game:addinstance'] = 'Add a new game';
 $string['gamecontent'] = 'Files and subfolders';
 $string['gamedetails_sizetype'] = '{$a->size} {$a->type}';

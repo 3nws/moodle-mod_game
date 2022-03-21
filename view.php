@@ -123,7 +123,7 @@ if ($redirect) {
             \core\notification::add(get_string('exportjson', 'game'), \core\output\notification::NOTIFY_WARNING);
         }
         // removing the game directory now that we are done with it
-        $directory_manager->remove_directory($old_dest);
+        $directory_manager->remove_dir_contents($old_dest);
     }
 
     $fp = get_file_packer('application/zip');

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Legacy Cron Quiz Reports Task
+ * Mod game cron remove dirs task
  *
  * @package    mod_game
  * @author     Enes Kurbetoğlu
@@ -41,6 +41,6 @@ class remove_old_dirs extends \core\task\scheduled_task {
         global $CFG;
         $games_dir = $CFG->dirroot.'/mod/game/games/';
         $manager = new \directory_manager(); // apparently that backwards slash is pretty important!!
-        $manager->remove_directories_older_than_x_mins($games_dir, 30);
+        $manager->remove_directories_older_than_x_mins($games_dir, 5);
     }
 }

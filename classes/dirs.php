@@ -38,11 +38,11 @@ class directory_manager {
                 if ($rs->isDir()){
                     $this->remove_dir_contents($rs->getRealPath());
                 } else {
-                    unlink($rs->getRealPath());
+                    if ($rs->getFilename()!=='results.json')
+                        unlink($rs->getRealPath());
                 }
             }
         }
-        $this->remove_empty_sub_folders($path);
     }
 
     
