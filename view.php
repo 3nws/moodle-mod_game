@@ -104,13 +104,13 @@ if ($redirect) {
     }
 
     $uniq = uniqid();
-    $dest = $CFG->dirroot.'/mod/game/games/'.$game->name.$uniq;
+    $dest = $CFG->dirroot.'/mod/game/games/'.$game->name."_".$cm->instance."_".$USER->id."_".$uniq;
 
     // Gets the newly exported scores on local and inserts them to the database
     if (isset($_POST['dest'])) {
         // $data = new stdClass();
         $old_dest = $_POST['dest'];
-        $data = $results_manager->game_get_local_results($game, $old_dest);
+        $data = $results_manager->game_get_local_results($old_dest);
         // add to db here
         if ($data){
             // creating new objects as to only use the fields we need in order to create a result, hopefully it'll be useful for unit tests
@@ -160,7 +160,7 @@ if ($redirect) {
         'name' => $game->name,
         'width' => $width_height[0],
         'height' => $width_height[1],
-        'build_path' => "games/".$game->name.$uniq."/Build",
+        'build_path' => "games/".$game->name."_".$cm->instance."_".$USER->id."_".$uniq."/Build",
         'results' => $is_results_empty ? $results : new stdClass(),
         'results_not_empty' => $is_results_empty,
         'formaction' => $formaction,

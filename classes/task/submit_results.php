@@ -15,14 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Game module version information
+ * Mod game cron remove dirs task
  *
  * @package    mod_game
+ * @author     Enes Kurbetoğlu
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
  */
+namespace mod_game\task;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022032301;       // The current module version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021051100;    // Requires this Moodle version.
-$plugin->component = 'mod_game'; // Full name of the plugin (used for diagnostics)
-$plugin->cron      = 60;
+require_once($CFG->dirroot.'/mod/game/classes/result.php');
+
+class submit_results extends \core\task\scheduled_task {
+
+    public function get_name() {
+        return get_string('submitresults', 'mod_game');
+    }
+
+    /**
+     * Execute all game tasks.
+     */
+    public function execute() {
+        global $CFG;
+        $games_dir = $CFG->dirroot.'/mod/game/games/';
+        $manager = new \results_manager(); // apparently that backwards slash is pretty important!!
+        $manager->submit_results($games_dir);
+    }
+}
