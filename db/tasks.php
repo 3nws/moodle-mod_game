@@ -44,4 +44,14 @@ $tasks = [
         'dayofweek' => '*',
         'month' => '*'
     ],
+
+    [
+        'classname' => 'mod_game\task\submit_results',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '*',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ],
 ];

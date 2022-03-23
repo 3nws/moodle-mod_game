@@ -124,6 +124,8 @@ If there are multiple files in this game, the start file type is displayed.
 
 If the file type is not known to the system, it will not display.';
 
+$string['submitresults'] = 'Submits results automatically every minute.';
+
 $string['threshold'] = 'The threshold to get a passing grade';
 
 $string['uploadeddate'] = 'Uploaded {$a}';

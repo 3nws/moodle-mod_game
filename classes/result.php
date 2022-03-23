@@ -24,6 +24,7 @@
  * @since      Moodle 3.0
  */
 
+require_once($CFG->dirroot.'/mod/game/classes/dirs.php');
 
 class results_manager {
 
@@ -61,6 +62,63 @@ class results_manager {
             $record = $DB->insert_record('game_results', $data, false);
             $this->update_results();
             return $record;
+        }
+    }
+
+    public function submit_results($path) : bool
+    {
+        try{
+            global $DB;
+            $record = false;
+            $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+            $files = new RecursiveIteratorIterator($it,
+                        RecursiveIteratorIterator::SELF_FIRST);
+            
+            foreach ($files as $file) {
+                if ($file->isDir() && $file->getFileName()!='Build' && $file->getFileName()!='TemplateData'){
+                    $data = $this->game_get_local_results($file->getRealPath());
+                    if(!$data){
+                        continue;
+                    }
+                    $arr = explode("_", $file->getRealPath());
+                    $cminstance = $arr[1];
+                    $userid = $arr[2];
+                    $game = $DB->get_record('game', array('id'=>$cminstance));
+                    $course = $DB->get_record('course', array('id'=>$game->course));
+
+                    $data->course = $course->id;
+                    $data->name = $game->name." result";
+                    $data->passornot = ($data->score >= $game->threshold) ? 1 : 0;
+                    $data->timemodified = time();
+                    $data->userid = $userid;
+                    $data->gameid = $game->id;
+                    $data->cmid = $cminstance;
+
+                    $sql_query =   "SELECT rs.id, rs.grade, rs.score 
+                                    FROM {game_results} rs 
+                                    WHERE rs.userid = :user_id AND rs.score = :score
+                                    ORDER BY rs.score DESC;";
+
+                    $params = [
+                        'user_id' => $userid,
+                        'score' => $data->score,
+                    ];
+                    
+                    $exact_matches = $DB->get_records_sql($sql_query, $params);
+
+                    if (!empty(array_values(($exact_matches)))){
+                        $record = false;
+                    }else{
+                        // delete the results file to reset after inserting the scores to the db
+                        $record = $DB->insert_record('game_results', $data, false);
+                        $this->update_results();
+                    }
+                    (new directory_manager())->remove_dir_contents($file);
+                }
+            }
+            return $record;
+        }catch(Exception $e){
+            return $this->submit_results($path);
         }
     }
 
@@ -132,7 +190,7 @@ class results_manager {
     }
 
     // Return a json object consisting of game results
-    public function game_get_local_results($game, $dest){
+    public function game_get_local_results($dest){
         $dest = $dest.'/results.json';
         if ($flag = file_exists($dest)){
             $data = file_get_contents($dest); 
