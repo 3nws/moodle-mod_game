@@ -102,6 +102,7 @@ $string['game:clearuserresults'] = 'Delete user results';
 $string['game:addresultinstance'] = 'Submit a result';
 $string['resolution'] = 'Resolution';
 $string['search:activity'] = 'File';
+$string['seeuserresults'] = "Show user's results";
 $string['selectmainfile'] = 'Please select the main file by clicking the icon next to file name.';
 $string['showdate'] = 'Show upload/modified date';
 $string['showdate_desc'] = 'Display upload/modified date on course page?';

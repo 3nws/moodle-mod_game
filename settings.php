@@ -63,6 +63,21 @@ if ($ADMIN->fulltree) {
       ";
 
 
-    $link .= "</div>";
-    $settings->add(new admin_setting_heading('modemptydb', get_string('modemptydb', 'game'), $link));
+    $link .= "</div></br>";
+
+
+    $userselector = new core_role_check_users_selector('reportuser', array());
+    $userselector->set_rows(20);
+
+    $OUTPUT->box_start('generalbox boxwidthnormal boxaligncenter', 'chooseuser');
+    $selector = "<div class='container'>";
+    $selector .= "<form method='POST' action='".$clear_url."'>";
+    $selector .= $userselector->display(true);
+    $selector .= '<p id="chooseusersubmit"><input type="submit" value="' . get_string('seeuserresults', 'game') . '" ' .
+            'class="btn btn-primary"/></p>';
+            '</form>
+            </div>';
+    $selector .= $OUTPUT->box_end();
+
+    $settings->add(new admin_setting_heading('modemptydb', get_string('modemptydb', 'game'), $link.$selector));
 }

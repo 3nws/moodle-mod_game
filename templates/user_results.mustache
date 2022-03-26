@@ -32,46 +32,85 @@
 
 
 <div class="container">
-{{^results_not_empty}}
-  <h2><strong>NO RESULTS IN THE DATABASE!</strong></h2>
-{{/results_not_empty}}
+{{^results_if_single_not_empty}}
+  {{^results_not_empty}}
+    <h2><strong>NO RESULTS IN THE DATABASE!</strong></h2>
+  {{/results_not_empty}}
+{{/results_if_single_not_empty}}
 
-{{#results_not_empty}}
-      <form action="{{ formaction }}" method='POST'>
-          <input type="hidden" name="clearall" value="clearall">
-          <input type="hidden" name="userSearch" value="{{ username }}">
-          <button class="btn btn-danger mb-3" aria-label='Delete all results'>DELETE ALL</button>
-      </form>
-      <table class="table table-sm table-hover" id='userResultsTable'>
-        <thead>
-          <tr>
-            <th scope="col">Username</th>
-            <th scope="col">Game</th>
-            <th scope="col">Score</th>
-            <th scope="col">Grade</th>
-            <th scope="col">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#results}}
-          <tr>
-            <td>{{ username }}</td>
-            <td>{{ name }}</td>
-            <td>{{ score }}</td>
-            <td>{{ grade }}</td>
-            <td>
-                <form action="{{ formaction }}" method='POST'>
-                    <input type="hidden" name="resultid" value="{{ id }}">
-                    <input type="hidden" name="userSearch" value="{{ username }}">
-                    <button class="btn btn-danger" aria-label='Delete user result'><i class="fa fa-trash"></i></button>
-                </form>
-            </td>
-          </tr>
-          {{/results}}
-        </tbody>
-      </table>
-      <script>
-        $('#userResultsTable').DataTable();
-      </script>
-{{/results_not_empty}}
+{{#results_if_single_not_empty}}
+    <form action="{{ formaction }}" method='POST'>
+        <input type="hidden" name="userid" value="{{ userid }}">
+        <input type="hidden" name="reportuser" value="{{ userid }}">
+        <button class="btn btn-danger">DELETE ALL</button>
+    </form>
+    <table class="table table-sm table-hover">
+      <caption>All scores of the user <span style="color: red">{{ username }}</span></caption>
+      <thead>
+        <tr>
+          <th scope="col">Game</th>
+          <th scope="col">Score</th>
+          <th scope="col">Grade</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#results_if_single}}
+        <tr>
+          <td>{{ name }}</td>
+          <td>{{ score }}</td>
+          <td>{{ grade }}</td>
+          <td>
+              <form action="{{ formaction }}" method='POST'>
+                  <input type="hidden" name="resultid" value="{{ id }}">
+                  <input type="hidden" name="reportuser" value="{{ userid }}">
+                  <button class="btn btn-danger">DELETE</button>
+              </form>
+          </td>
+        </tr>
+        {{/results_if_single}}
+      </tbody>
+    </table>
+{{/results_if_single_not_empty}}
+
+{{^is_single_user}}
+  {{#results_not_empty}}
+        <form action="{{ formaction }}" method='POST'>
+            <input type="hidden" name="clearall" value="clearall">
+            <input type="hidden" name="userSearch" value="{{ username }}">
+            <button class="btn btn-danger mb-3" aria-label='Delete all results'>DELETE ALL</button>
+        </form>
+        <table class="table table-sm table-hover" id='userResultsTable'>
+          <thead>
+            <tr>
+              <th scope="col">Username</th>
+              <th scope="col">Game</th>
+              <th scope="col">Score</th>
+              <th scope="col">Grade</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#results}}
+            <tr>
+              <td>{{ username }}</td>
+              <td>{{ name }}</td>
+              <td>{{ score }}</td>
+              <td>{{ grade }}</td>
+              <td>
+                  <form action="{{ formaction }}" method='POST'>
+                      <input type="hidden" name="resultid" value="{{ id }}">
+                      <input type="hidden" name="userSearch" value="{{ username }}">
+                      <button class="btn btn-danger" aria-label='Delete user result'><i class="fa fa-trash"></i></button>
+                  </form>
+              </td>
+            </tr>
+            {{/results}}
+          </tbody>
+        </table>
+        <script>
+          $('#userResultsTable').DataTable();
+        </script>
+  {{/results_not_empty}}
+{{/is_single_user}}
 </div>

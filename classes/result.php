@@ -199,6 +199,15 @@ class results_manager {
         }
     }
 
+    // Clears all the matching records in the results table
+    public function clear_all_records_by_user($userid){
+        global $DB;
+
+        require_capability('mod/game:clearuserresults', context_system::instance());
+        
+        $DB->delete_records_select("game_results", "userid = ".$userid);
+    }
+
     // Clears the matching record in the results table
     public function clear_records_by_user($resultid) : bool
     {
