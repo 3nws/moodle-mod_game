@@ -104,10 +104,12 @@ if ($redirect) {
     }
 
     $uniq = uniqid();
+    // TODO: seperate user and unique id and pass it along the template
     $dest = $CFG->dirroot.'/mod/game/games/'.$game->name."_".$cm->instance."_".$USER->id."_".$uniq;
 
     // Gets the newly exported scores on local and inserts them to the database
     if (isset($_POST['dest'])) {
+        // TODO: game sends request here and instead of exporting a real file and me reading it, they'll send the data through the request 
         // $data = new stdClass();
         $old_dest = $_POST['dest'];
         $data = $results_manager->game_get_local_results($old_dest);

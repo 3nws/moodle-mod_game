@@ -157,6 +157,7 @@
         createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
+          // maybe pass data to unityInstance?
           loadingBar.style.display = "none";
           document.onkeydown = function(e){
               var isFullscreen = false;
